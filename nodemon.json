@@ -1,0 +1,13 @@
+{
+    "colours": true,
+    "verbose": true,
+    "restartable": "ns",
+    "ignore": [
+        "node_modules",
+        "dist"
+    ],
+    "watch": [
+        "*.*"
+    ],
+    "ext": "html,js,css"
+}
