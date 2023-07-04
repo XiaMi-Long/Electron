@@ -3,9 +3,8 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 
-function createWindow() {
+function createWindow () {
   // Create the browser window.
-  
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
@@ -17,6 +16,8 @@ function createWindow() {
       sandbox: false
     }
   })
+
+  mainWindow.webContents.toggleDevTools()
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
