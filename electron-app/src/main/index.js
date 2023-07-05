@@ -1,7 +1,9 @@
-import { app, shell, BrowserWindow } from 'electron'
+import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import { initFileConfig } from './module/init'
+import { handleImageFileOpen } from './module/file'
 import icon from '../../resources/icon.png?asset'
+import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 
 function createWindow () {
   // Create the browser window.
@@ -9,7 +11,7 @@ function createWindow () {
     width: 900,
     height: 670,
     show: false,
-    autoHideMenuBar: true,
+    // autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -35,6 +37,8 @@ function createWindow () {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  return mainWindow
 }
 
 // This method will be called when Electron has finished
@@ -43,7 +47,8 @@ function createWindow () {
 app.whenReady().then(() => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron')
-
+  // 初始化配置文件
+  initFileConfig()
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
   // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
@@ -51,7 +56,10 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
+
+  ipcMain.handle('dialog:openImageFile', handleImageFileOpen)
   createWindow()
+
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the

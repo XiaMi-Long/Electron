@@ -16,6 +16,7 @@ module.exports = {
   },
   extends: ['plugin:vue/vue3-recommended', 'eslint:recommended', '@vue/eslint-config-prettier'],
   rules: {
+    "useTabs": false,
     'vue/require-default-prop': 'off',
     'vue/multi-word-component-names': 'off'
   }

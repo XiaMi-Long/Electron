@@ -1,5 +1,8 @@
 {
 	"devDependencies": {
 		"sass": "^1.63.6"
+	},
+	"dependencies": {
+		"animate.css": "^4.1.1"
 	}
 }
