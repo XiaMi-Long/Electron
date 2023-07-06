@@ -2,10 +2,12 @@ lockfileVersion: 5.4
 
 specifiers:
   animate.css: ^4.1.1
+  dayjs: ^1.11.9
   sass: ^1.63.6
 
 dependencies:
   animate.css: 4.1.1
+  dayjs: 1.11.9
 
 devDependencies:
   sass: 1.63.6
@@ -50,6 +52,10 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
+
+  /dayjs/1.11.9:
+    resolution: {integrity: sha512-QvzAURSbQ0pKdIye2txOzNaHmxtUBXerpY0FJsFXUMKbIZeFm5ht1LS/jFsrncjnmtv8HsG0W2g6c0zUjZWmpA==}
+    dev: false
 
   /fill-range/7.0.1:
     resolution: {integrity: sha512-qOo9F+dMUmC2Lcb4BbVvnKJxTPjCm+RRpe4gDuGrzkL7mEVl/djYSu2OdQ2Pa302N4oqkSg9ir6jaLWJ2USVpQ==}

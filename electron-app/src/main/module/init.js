@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
+import { writeLog } from '../common/log'
+import { osConfig } from '../config/os-config'
 import { appConfig } from '../config/app-config'
 
 
@@ -9,63 +11,98 @@ import { appConfig } from '../config/app-config'
  */
 export const initFileConfig = async function () {
 
-    let basePath = '';
-    const fileName = 'app-config.json';
-    switch (process.platform) {
-        case 'win32':
-            // Windows 系统
-            basePath = 'D:/EasyCC/config'; // 设置 Windows 上的基础路径（例如 D 盘）
-            appConfig.systemFileAddress = 'D:/EasyCC/config/file-folder'
-            break;
-        case 'darwin':
-            // macOS 系统
-            basePath = '/Volumes/D/EasyCC/config';// 设置 macOS 上的基础路径（例如 D 盘）
-            appConfig.systemFileAddress = '/Volumes/D/EasyCC/config/file-folder'
-            break;
-        default:
-            // Linux 系统
-            basePath = '/mnt/d/EasyCC/config'; // 设置 Linux 上的基础路径（例如 D 盘）
-            appConfig.systemFileAddress = '/mnt/d/EasyCC/config/file-folder'
-            break;
-    }
 
-    const jsonData = JSON.stringify(appConfig)
-    const folderPath = path.join(basePath);
-    const configFilePath = path.join(basePath, fileName)
-    const res = await fs.existsSync(folderPath)
-    // 如果存在
-    if (res) {
 
-    } else {
-        console.log(folderPath, configFilePath);
-        fs.mkdir(folderPath, { recursive: true }, err => {
-            console.log(err);
-            if (!err) {
+    const appConfigFileName = 'app-config.json';
+    appConfig.systemFileAddress = osConfig[process.platform].systemFileAddress
 
-                console.log(`创建${folderPath}目录成功`);
 
-                fs.writeFile(configFilePath, jsonData, (err) => {
-                    console.log(err);
-                    if (err) {
-                        console.log(`创建${configFilePath}目录失败,加入日志`);
-                    };
+    initAppLogFile()
+    // 检查app-config文件是否存在
+    // const res = await fs.existsSync(appConfigFolderPath)
+    // // 如果存在
+    // if (res) {
 
-                    if (!err) {
-                        console.log(`创建${configFilePath}目录成功`);
-                    }
+    // } else {
+    //     console.log(appConfigFolderPath, appConfigFilePath);
+    //     fs.mkdir(appConfigFolderPath, { recursive: true }, err => {
+    //         console.log(err);
+    //         if (!err) {
 
-                });
+    //             console.log(`创建${appConfigFolderPath}目录成功`);
 
+    //             fs.writeFile(appConfigFilePath, jsonData, (err) => {
+    //                 console.log(err);
+    //                 if (err) {
+    //                     console.log(`创建${appConfigFilePath}目录失败,加入日志`);
+    //                 };
+
+    //                 if (!err) {
+    //                     console.log(`创建${appConfigFilePath}目录成功`);
+    //                 }
+
+    //             });
+
+    //         }
+
+    //         if (err) {
+    //             console.log(`创建${appConfigFolderPath}目录失败,加入日志`);
+    //         }
+    //     })
+
+    // }
+    // 
+
+
+
+
+}
+
+/**
+ * 初始化日志文件
+ */
+const initAppLogFile = async function () {
+    const appLogFileName = appConfig.appLogFileName;
+    // app-log文件路径
+    const appLogFolderPath = path.join(appConfig.systemFileAddress)
+    const appLogFilePath = path.join(appConfig.appConfigFileName, appLogFileName)
+    // 检查app-log文件目录是否存在
+    const isAppLogFilePathAvailable = await fs.existsSync(appLogFolderPath)
+    const writeAppLogFile = function () {
+        // 如果路径文件存在就不创建文件
+        if (fs.existsSync) {
+            return
+        }
+
+        // 开始创建日志文件
+        fs.writeFile(appLogFilePath, '', err2 => {
+            if (err2) {
+                throw new Error(`创建${appLogFilePath}文件失败`)
             }
 
-            if (err) {
-                console.log(`创建${folderPath}目录失败,加入日志`);
+            if (!err2) {
+                console.log(`创建${appLogFilePath}文件成功`);
             }
         })
 
     }
 
+    // 如果存在该目录
+    if (!isAppLogFilePathAvailable) {
+        fs.mkdir(appLogFolderPath, { recursive: true }, err => {
+            if (err) {
+                throw new Error(`创建${appLogFolderPath}目录失败`)
+            }
 
+            console.log(`创建${appLogFolderPath}目录成功`);
 
+            if (!err) {
+                writeAppLogFile()
+            }
+        })
+    }
 
+    if (isAppLogFilePathAvailable) {
+        writeAppLogFile()
+    }
 }
