@@ -1,4 +1,6 @@
+const fs = require('fs');
 import { dialog } from 'electron'
+
 /**
  * 打开文件模块返回url
  */
@@ -15,6 +17,27 @@ export const handleImageFileOpen = async function () {
         console.log(err);
     })
     if (!canceled) {
-        return filePaths[0]
+        const readStream = fs.createReadStream(filePaths[0]);
+        const array = []
+        let result = null
+        let isRead = true
+        readStream.on('data', (chunk) => {
+            array.push(chunk)
+        });
+
+        readStream.on('end', () => {
+            result = new Blob(array)
+            isRead = false
+        });
+
+        readStream.on('error', (error) => {
+            isRead = false
+        });
+
+        while (isRead) {
+            if (isRead === false) {
+                return result
+            }
+        }
     }
 }

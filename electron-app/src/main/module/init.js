@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
-import { writeLog } from '../common/log'
+import { pushLog, writeLogs, clearLogs } from '../common/log'
 import { osConfig } from '../config/os-config'
 import { appConfig } from '../config/app-config'
 
@@ -10,91 +10,51 @@ import { appConfig } from '../config/app-config'
  * 设置和读取软件默认本地配置文件
  */
 export const initFileConfig = async function () {
-
-
-
-    const appConfigFileName = 'app-config.json';
-    appConfig.systemFileAddress = osConfig[process.platform].systemFileAddress
-
-
     initAppLogFile()
-    // 检查app-config文件是否存在
-    // const res = await fs.existsSync(appConfigFolderPath)
-    // // 如果存在
-    // if (res) {
-
-    // } else {
-    //     console.log(appConfigFolderPath, appConfigFilePath);
-    //     fs.mkdir(appConfigFolderPath, { recursive: true }, err => {
-    //         console.log(err);
-    //         if (!err) {
-
-    //             console.log(`创建${appConfigFolderPath}目录成功`);
-
-    //             fs.writeFile(appConfigFilePath, jsonData, (err) => {
-    //                 console.log(err);
-    //                 if (err) {
-    //                     console.log(`创建${appConfigFilePath}目录失败,加入日志`);
-    //                 };
-
-    //                 if (!err) {
-    //                     console.log(`创建${appConfigFilePath}目录成功`);
-    //                 }
-
-    //             });
-
-    //         }
-
-    //         if (err) {
-    //             console.log(`创建${appConfigFolderPath}目录失败,加入日志`);
-    //         }
-    //     })
-
-    // }
-    // 
-
-
-
-
+    initAppConfig()
 }
 
 /**
  * 初始化日志文件
+ * 1. 获取 app-log文件夹路径
+ * 2. 获取 app-log文件路径
+ * 3. 检查app-log文件目录是否存在
+ * 4. 如果存在相应目录就创建日志文件,不存在相应目录就先创建目录再创建日志文件
  */
 const initAppLogFile = async function () {
     const appLogFileName = appConfig.appLogFileName;
-    // app-log文件路径
     const appLogFolderPath = path.join(appConfig.systemFileAddress)
-    const appLogFilePath = path.join(appConfig.appConfigFileName, appLogFileName)
-    // 检查app-log文件目录是否存在
+    const appLogFilePath = path.join(appLogFolderPath, appLogFileName)
     const isAppLogFilePathAvailable = await fs.existsSync(appLogFolderPath)
     const writeAppLogFile = function () {
         // 如果路径文件存在就不创建文件
-        if (fs.existsSync) {
+        if (fs.existsSync(appLogFilePath)) {
             return
         }
 
         // 开始创建日志文件
         fs.writeFile(appLogFilePath, '', err2 => {
             if (err2) {
+                clearLogs()
                 throw new Error(`创建${appLogFilePath}文件失败`)
             }
 
             if (!err2) {
-                console.log(`创建${appLogFilePath}文件成功`);
+                pushLog(`创建${appLogFilePath}文件成功`, 'success')
+                writeLogs()
             }
         })
 
     }
 
-    // 如果存在该目录
+    // 如果不存在该目录,创建改目录再创建文件
     if (!isAppLogFilePathAvailable) {
         fs.mkdir(appLogFolderPath, { recursive: true }, err => {
             if (err) {
                 throw new Error(`创建${appLogFolderPath}目录失败`)
             }
 
-            console.log(`创建${appLogFolderPath}目录成功`);
+            pushLog(`创建${appLogFolderPath}目录成功`, 'success')
 
             if (!err) {
                 writeAppLogFile()
@@ -102,7 +62,65 @@ const initAppLogFile = async function () {
         })
     }
 
+    // 如果存在该目录,直接创建文件
     if (isAppLogFilePathAvailable) {
         writeAppLogFile()
+    }
+}
+
+/**
+ * 初始化appconfig文件
+ * 1. 获取 app-config文件夹路径
+ * 2. 获取 app-config文件路径
+ * 3. 检查app-config文件目录是否存在
+ * 4. 如果存在相应目录就创建应用全局配置文件,不存在相应目录就先创建目录再创建应用全局配置文件
+ * 5. 如果要创建全局配置文件,就把app-config对象当做字符串写入进去
+ */
+const initAppConfig = async function () {
+    const appConfigFileName = appConfig.appConfigFileName
+    const appConfigFolderPath = path.join(appConfig.systemFileAddress)
+    const appConfigFilePath = path.join(appConfigFolderPath, appConfigFileName)
+    const isConfigFilePathAvailable = await fs.existsSync(appConfigFolderPath)
+    const writeAppConfigFile = function () {
+        // 如果路径文件存在就不创建文件
+        if (fs.existsSync(appConfigFilePath)) {
+            return
+        }
+
+        const jsonData = JSON.stringify(appConfig)
+
+        // 开始创建日志文件
+        fs.writeFile(appConfigFilePath, jsonData, err2 => {
+            if (err2) {
+                clearLogs()
+                throw new Error(`创建${appConfigFilePath}文件失败`)
+            }
+
+            if (!err2) {
+                pushLog(`创建${appConfigFilePath}文件成功`, 'success')
+                writeLogs()
+            }
+        })
+
+    }
+
+    // 如果不存在该目录,创建改目录再创建文件
+    if (!isConfigFilePathAvailable) {
+        fs.mkdir(appLogFolderPath, { recursive: true }, err => {
+            if (err) {
+                throw new Error(`创建${appLogFolderPath}目录失败`)
+            }
+
+            pushLog(`创建${appConfigFolderPath}目录成功`, 'success')
+
+            if (!err) {
+                writeAppConfigFile()
+            }
+        })
+    }
+
+    // 如果存在该目录,直接创建文件
+    if (isConfigFilePathAvailable) {
+        writeAppConfigFile()
     }
 }

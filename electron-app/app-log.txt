@@ -1,0 +1,3 @@
+【2023-07-06 17:01:26】success：创建D:\Electron\electron-app\app-config.json文件成功
+【2023-07-06 17:01:26】success：创建D:\Electron\electron-app\app-log.txt文件成功
+【2023-07-06 17:01:26】success：创建D:\Electron\electron-app\app-log.txt文件成功
