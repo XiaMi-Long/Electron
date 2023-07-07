@@ -2,7 +2,25 @@
 
 <template>
   <div class="video-container">
-    <n-grid x-gap="12" :cols="4">
+    <n-grid x-gap="12" :y-gap="8" cols="4 xs:1 s:2 m:3 l:4" responsive="screen">
+      <n-gi>
+        <div class="card">
+          <n-image width="100%" height="200" src="/src/assets/1.png" />
+        </div>
+      </n-gi>
+
+      <n-gi>
+        <div class="card">
+          <n-image width="100%" height="200" src="/src/assets/1.png" />
+        </div>
+      </n-gi>
+
+      <n-gi>
+        <div class="card">
+          <n-image width="100%" height="200" src="/src/assets/1.png" />
+        </div>
+      </n-gi>
+
       <n-gi>
         <div class="card">
           <n-image width="100%" height="200" src="/src/assets/1.png" />
@@ -29,12 +47,9 @@
 
 <style scoped lang="scss">
 .video-container {
-  display: flex;
   padding: 20px;
   height: 100%;
-  flex-wrap: wrap;
   box-sizing: border-box;
-  justify-content: space-around;
 
   .card {
     width: 100%;
