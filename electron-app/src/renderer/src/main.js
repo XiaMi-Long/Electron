@@ -14,13 +14,26 @@ import {
   NListItem,
   NImage,
   NGrid,
-  NGridItem
+  NGridItem,
+  NSpin,
+  NMessageProvider
 } from 'naive-ui'
 
 const pinia = createPinia()
 
 const naive = create({
-  components: [NAvatar, NSpace, NButton, NList, NListItem, NImage, NGrid, NGridItem]
+  components: [
+    NAvatar,
+    NSpace,
+    NButton,
+    NList,
+    NListItem,
+    NImage,
+    NGrid,
+    NGridItem,
+    NSpin,
+    NMessageProvider
+  ]
 })
 
 createApp(App).use(router).use(naive).use(pinia).mount('#app')

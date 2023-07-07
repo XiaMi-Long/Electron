@@ -1,6 +1,5 @@
 const fs = require('fs')
 const path = require('path')
-const os = require('os')
 import avatar from '../../../resources/avatar.jpg?asset'
 import { appConfig } from '../config/app-config'
 import { pushLog, writeLogs, clearLogs } from '../common/log'

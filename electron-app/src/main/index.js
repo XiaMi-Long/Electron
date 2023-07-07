@@ -1,7 +1,7 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { initFileConfig, handleInitRenderer } from './module/init'
-import { handleImageFileOpen } from './module/file'
+import { handleImageFileOpen, handleUpdateLocalAvatarFile } from './module/file'
 import { writeLog, pushLog, writeLogs, clearLogs } from './common/log'
 import icon from '../../resources/icon.png?asset'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
@@ -66,6 +66,8 @@ app.whenReady().then(() => {
   ipcMain.handle('init:init-renderer', handleInitRenderer)
   // 监听打开文件选择文件操作
   ipcMain.handle('dialog:openImageFile', handleImageFileOpen)
+  // 监听更新本地头像文件
+  ipcMain.handle('update:avatar-file', handleUpdateLocalAvatarFile)
   // 监听写入日志操作
   ipcMain.on('write-log', (event, str, type) => {
     writeLog(str, type)

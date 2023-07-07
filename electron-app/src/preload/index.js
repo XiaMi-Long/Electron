@@ -3,12 +3,21 @@ import { contextBridge, ipcRenderer } from 'electron'
 
 // Custom APIs for renderer
 const api = {
+  // 初始化渲染进程时,需要进行的操作
   initRenderer: () => ipcRenderer.invoke('init:init-renderer'),
+  // 选择头像时候的时候,需要打开的文件选择框
   selectFile: () => ipcRenderer.invoke('dialog:openImageFile'),
+  // 头像更新完,更新本地头像文件
+  updateLocalAvatarFile: (originUrl) => ipcRenderer.invoke('update:avatar-file', originUrl),
+  // 日志操作
   logs: {
+    // 一次性写入全部日志
     writeLogs: () => ipcRenderer.send('write-logs'),
+    // 清除日志数组
     clearLogs: () => ipcRenderer.send('clear-logs'),
+    // 写入一次日志记录
     writeLog: (str, type) => ipcRenderer.send('write-log', str, type),
+    // 向日志数组里面推入一条,待一次性写入
     pushLog: (str, type) => ipcRenderer.send('push-log', str, type)
   }
 }

@@ -12,9 +12,11 @@ init()
 </script>
 
 <template>
-  <div class="container">
-    <router-view></router-view>
-  </div>
+  <n-message-provider>
+    <div class="container">
+      <router-view></router-view>
+    </div>
+  </n-message-provider>
 </template>
 
 <style lang="less">

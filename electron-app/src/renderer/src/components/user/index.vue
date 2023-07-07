@@ -1,28 +1,42 @@
 <script setup>
+import { ref } from 'vue'
+import { useMessage } from 'naive-ui'
 import { useUserStore } from '@renderer/paina/user'
+
 const store = useUserStore()
+const message = useMessage()
+
+const showLoading = ref(false)
 
 const uploadLocalFile = async function () {
-  const res = await window.api.selectFile()
-  store.setUserAvatarBase64(res)
+  const { url, originUrl } = await window.api.selectFile()
+  showLoading.value = true
+  store.setUserAvatarBase64(url)
+  // 通知主进程copy图片
+  const result = window.api.updateLocalAvatarFile(originUrl)
+  if (result) {
+    message.success('图片上传成功')
+    showLoading.value = false
+    return
+  }
+
+  showLoading.value = false
+  message.error('图片上传失败')
 }
 </script>
 
 <template>
   <div class="user-container">
-    <n-list bordered>
-      <n-list-item>
-        <n-avatar
-          class="avatar animate__animated"
-          round
-          :size="150"
-          :src="store.userAvatarBase64"
-        />
-        <template #suffix>
-          <n-button type="primary" @click="uploadLocalFile"> 上传本地图片 </n-button>
-        </template>
-      </n-list-item>
-    </n-list>
+    <n-spin :show="showLoading">
+      <n-list bordered>
+        <n-list-item>
+          <n-avatar class="avatar animate__animated" :size="200" :src="store.userAvatarBase64" />
+          <template #suffix>
+            <n-button type="primary" @click="uploadLocalFile"> 上传本地图片 </n-button>
+          </template>
+        </n-list-item>
+      </n-list>
+    </n-spin>
   </div>
 </template>
 

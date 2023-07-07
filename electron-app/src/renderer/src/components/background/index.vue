@@ -27,21 +27,6 @@
         </div>
       </n-gi>
     </n-grid>
-    <!-- <div class="card">
-      <n-image width="100%" height="200" src="/src/assets/1.png" />
-    </div>
-
-    <div class="card">
-      <n-image width="100%" height="200" src="/src/assets/2.jpg" />
-    </div>
-
-    <div class="card">
-      <n-image width="100%" height="200" src="/src/assets/2.jpg" />
-    </div> -->
-    <!-- 
-    <div class="card">
-      <n-image width="100%" height="200" src="/src/assets/2.jpg" />
-    </div> -->
   </div>
 </template>
 
@@ -50,6 +35,8 @@
   padding: 20px;
   height: 100%;
   box-sizing: border-box;
+
+  overflow: auto;
 
   .card {
     width: 100%;
@@ -63,7 +50,13 @@
       width: 100%;
 
       img {
+        transition: all 0.5s;
         width: 100%;
+      }
+
+      img:hover {
+        filter: brightness(125%);
+        transform: scale(1.05);
       }
     }
   }

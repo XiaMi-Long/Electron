@@ -1,10 +1,14 @@
-【2023-07-06 17:01:26】success：创建D:\Electron\electron-app\app-config.json文件成功
-【2023-07-06 17:01:26】success：创建D:\Electron\electron-app\app-log.txt文件成功
-【2023-07-06 17:01:26】success：创建D:\Electron\electron-app\app-log.txt文件成功
-【2023-07-07 10:42:43】用户更换头像：[object Object]
-【2023-07-07 10:43:54】用户更换头像：[object Object]
-【2023-07-07 10:44:43】success：用户更换头像
-【2023-07-07 14:30:07】success：创建D:\Electron\electron-app\images\user\avatar\avatar.jpg文件成功
-【2023-07-07 14:32:25】success：创建D:\Electron\electron-app\images\user\avatar\avatar.jpg文件成功
-【2023-07-07 14:42:50】success：创建D:\Electron\electron-app\images\user\avatar\avatar.jpg文件成功
-【2023-07-07 14:49:17】success：创建D:\Electron\electron-app\images\user\avatar\avatar.jpg文件成功
+【2023-07-07 22:42:22】success：创建E:\私人项目\Electron\electron-app\app-config.json文件成功
+【2023-07-07 22:42:22】success：创建E:\私人项目\Electron\electron-app\app-log.txt文件成功
+【2023-07-07 22:42:22】success：创建E:\私人项目\Electron\electron-app\app-log.txt文件成功
+【2023-07-07 22:49:49】success：用户更换头像
+【2023-07-07 22:49:53】success：用户更换头像
+【2023-07-07 22:59:51】success：用户更换头像
+【2023-07-07 23:00:14】success：用户更换头像
+【2023-07-07 23:08:55】success：用户更换头像
+【2023-07-07 23:12:06】success：用户更换头像
+【2023-07-07 23:12:30】success：用户更换头像
+【2023-07-07 23:15:15】success：用户更换头像
+【2023-07-07 23:15:24】success：用户更换头像
+【2023-07-07 23:15:58】success：用户更换头像
+【2023-07-07 23:16:44】success：用户更换头像
