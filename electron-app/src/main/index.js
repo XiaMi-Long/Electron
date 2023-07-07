@@ -1,16 +1,22 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
-import { initFileConfig } from './module/init'
+import { initFileConfig, handleInitRenderer } from './module/init'
 import { handleImageFileOpen } from './module/file'
+import { writeLog, pushLog, writeLogs, clearLogs } from './common/log'
 import icon from '../../resources/icon.png?asset'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 
-function createWindow () {
+function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 900,
+    width: 1200,
     height: 670,
+    // minWidth: 1200,
+    // minHeight: 670,
+    // maxWidth: 1200,
+    // maxHeight: 900,
     show: false,
+    minimizable: false,
     // autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
@@ -56,10 +62,23 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-
+  // 监听渲染进程初始化操作
+  ipcMain.handle('init:init-renderer', handleInitRenderer)
+  // 监听打开文件选择文件操作
   ipcMain.handle('dialog:openImageFile', handleImageFileOpen)
-  createWindow()
+  // 监听写入日志操作
+  ipcMain.on('write-log', (event, str, type) => {
+    writeLog(str, type)
+  })
+  // 监听写入多个日志操作
+  ipcMain.on('push-log', (event, str, type) => [pushLog(str, type)])
+  ipcMain.on('write-logs', () => [writeLogs()])
+  // 监听清除日志数组
+  ipcMain.on('clear-logs', () => {
+    clearLogs()
+  })
 
+  createWindow()
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the

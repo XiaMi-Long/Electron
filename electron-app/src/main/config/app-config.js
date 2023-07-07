@@ -6,6 +6,7 @@ export const appConfig = {
     appLogFileName: 'app-log.txt',
     user: {
         userName: 'C.C',
-        userAvatar: ''
+        userAvatarPath: '/images/user/avatar',
+        userAvatarFileName: 'avatar.jpg'
     }
 }

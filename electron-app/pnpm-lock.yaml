@@ -20,6 +20,7 @@ specifiers:
   vite: ^4.3.9
   vue: ^3.3.4
   vue-router: '4'
+  wallpaper: ^7.0.0
 
 dependencies:
   '@electron-toolkit/preload': 2.0.0_electron@24.6.0
@@ -27,6 +28,7 @@ dependencies:
   electron-updater: 5.3.0
   pinia: 2.1.4_vue@3.3.4
   vue-router: 4.2.2_vue@3.3.4
+  wallpaper: 7.0.0
 
 devDependencies:
   '@electron/notarize': 1.2.4
@@ -3292,6 +3294,11 @@ packages:
       vooks: 0.2.12_vue@3.3.4
       vue: 3.3.4
     dev: true
+
+  /wallpaper/7.0.0:
+    resolution: {integrity: sha512-PZy40Tkvb4tREX49D+DSP0xBoYa1xkbdBMyGKTAB+tHQFQxfY/0i2OW0YwF+PU4o2NBHOVf37IPLolP9gKAkxg==}
+    engines: {node: '>=16'}
+    dev: false
 
   /which/2.0.2:
     resolution: {integrity: sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==}

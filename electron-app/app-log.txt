@@ -1,3 +1,10 @@
 【2023-07-06 17:01:26】success：创建D:\Electron\electron-app\app-config.json文件成功
 【2023-07-06 17:01:26】success：创建D:\Electron\electron-app\app-log.txt文件成功
 【2023-07-06 17:01:26】success：创建D:\Electron\electron-app\app-log.txt文件成功
+【2023-07-07 10:42:43】用户更换头像：[object Object]
+【2023-07-07 10:43:54】用户更换头像：[object Object]
+【2023-07-07 10:44:43】success：用户更换头像
+【2023-07-07 14:30:07】success：创建D:\Electron\electron-app\images\user\avatar\avatar.jpg文件成功
+【2023-07-07 14:32:25】success：创建D:\Electron\electron-app\images\user\avatar\avatar.jpg文件成功
+【2023-07-07 14:42:50】success：创建D:\Electron\electron-app\images\user\avatar\avatar.jpg文件成功
+【2023-07-07 14:49:17】success：创建D:\Electron\electron-app\images\user\avatar\avatar.jpg文件成功

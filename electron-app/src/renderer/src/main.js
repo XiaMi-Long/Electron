@@ -1,22 +1,26 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import 'animate.css';
+import 'animate.css'
+import { createPinia } from 'pinia'
 import { router } from '@renderer/router/index'
 import {
-    // create naive ui
-    create,
-    // component
-    NAvatar,
-    NSpace,
-    NButton,
-    NList,
-    NListItem
+  // create naive ui
+  create,
+  // component
+  NAvatar,
+  NSpace,
+  NButton,
+  NList,
+  NListItem,
+  NImage,
+  NGrid,
+  NGridItem
 } from 'naive-ui'
 
+const pinia = createPinia()
 
 const naive = create({
-    components: [NAvatar, NSpace, NButton, NList, NListItem]
+  components: [NAvatar, NSpace, NButton, NList, NListItem, NImage, NGrid, NGridItem]
 })
 
-
-createApp(App).use(router).use(naive).mount('#app')
+createApp(App).use(router).use(naive).use(pinia).mount('#app')

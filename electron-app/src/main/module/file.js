@@ -1,5 +1,6 @@
 const fs = require('fs');
 import { dialog } from 'electron'
+import { writeLog } from '../common/log'
 
 /**
  * 打开文件模块返回url
@@ -14,30 +15,11 @@ export const handleImageFileOpen = async function () {
             'openFile',
         ],
     }).catch(err => {
-        console.log(err);
+        writeLog(`{handleImageFileOpen方法}选择文件出现错误-${err}`, 'error')
     })
     if (!canceled) {
-        const readStream = fs.createReadStream(filePaths[0]);
-        const array = []
-        let result = null
-        let isRead = true
-        readStream.on('data', (chunk) => {
-            array.push(chunk)
-        });
-
-        readStream.on('end', () => {
-            result = new Blob(array)
-            isRead = false
-        });
-
-        readStream.on('error', (error) => {
-            isRead = false
-        });
-
-        while (isRead) {
-            if (isRead === false) {
-                return result
-            }
-        }
+        const fileData = fs.readFileSync(filePaths[0], { encoding: 'base64' })
+        const dataURL = `data:image/png;base64,${fileData}`;
+        return dataURL
     }
 }

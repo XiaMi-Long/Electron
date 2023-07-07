@@ -1,7 +1,10 @@
 <script setup>
+import { useUserStore } from '@renderer/paina/user'
+const store = useUserStore()
+
 const uploadLocalFile = async function () {
   const res = await window.api.selectFile()
-  console.log(res)
+  store.setUserAvatarBase64(res)
 }
 </script>
 
@@ -13,7 +16,7 @@ const uploadLocalFile = async function () {
           class="avatar animate__animated"
           round
           :size="150"
-          src="/src/assets/image/laopo.jpg"
+          :src="store.userAvatarBase64"
         />
         <template #suffix>
           <n-button type="primary" @click="uploadLocalFile"> 上传本地图片 </n-button>

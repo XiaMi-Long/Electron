@@ -3,8 +3,10 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { enumConfig } from '@renderer/config/menu'
 import { appConfig } from '@renderer/config/app'
+import { useUserStore } from '@renderer/paina/user'
 
 const router = useRouter()
+const store = useUserStore()
 const selectedEnumId = ref('')
 
 /**
@@ -35,7 +37,7 @@ onMounted(() => {
     <div class="menu animate__animated animate__fadeInLeft">
       <div class="list-box">
         <div class="avatar list-item">
-          <n-avatar round :size="70" src="/src/assets/image/laopo.jpg" />
+          <n-avatar round :size="70" :src="store.userAvatarBase64" />
         </div>
         <div
           v-for="(item, index) of enumConfig"
