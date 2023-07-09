@@ -1,3 +1,1 @@
-export const userConfig = {
-    avatarUrl: '../assets/image/laopo.jpg',
-}
+export const userConfig = {}

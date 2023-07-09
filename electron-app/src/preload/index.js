@@ -9,6 +9,9 @@ const api = {
   selectFile: () => ipcRenderer.invoke('dialog:openImageFile'),
   // 头像更新完,更新本地头像文件
   updateLocalAvatarFile: (originUrl) => ipcRenderer.invoke('update:avatar-file', originUrl),
+  // 同步本地appconfig文件数据
+  synchronizeLocalAppConfigFile: (appConfig, type) =>
+    ipcRenderer.send('synchronize-local-app-config-file', appConfig, type),
   // 日志操作
   logs: {
     // 一次性写入全部日志

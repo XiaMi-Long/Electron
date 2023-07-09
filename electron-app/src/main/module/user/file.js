@@ -1,8 +1,8 @@
 const fs = require('fs')
 const path = require('path')
 import { dialog } from 'electron'
-import { writeLog } from '../common/log'
-import { appConfig } from '../config/app-config'
+import { writeLog } from '../../common/log'
+import { appConfig } from '../../config/app-config'
 
 /**
  * 打开文件模块返回url
