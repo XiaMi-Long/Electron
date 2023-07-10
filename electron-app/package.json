@@ -25,7 +25,8 @@
     "pinia": "^2.1.4",
     "sass": "^1.63.6",
     "vue-router": "4",
-    "wallpaper": "^7.0.0"
+    "wallpaper": "^7.0.0",
+    "xijs": "^1.2.6"
   },
   "devDependencies": {
     "@electron/notarize": "^1.2.3",

@@ -5,10 +5,19 @@ import { contextBridge, ipcRenderer } from 'electron'
 const api = {
   // 初始化渲染进程时,需要进行的操作
   initRenderer: () => ipcRenderer.invoke('init:init-renderer'),
-  // 选择头像时候的时候,需要打开的文件选择框
-  selectFile: () => ipcRenderer.invoke('dialog:openImageFile'),
-  // 头像更新完,更新本地头像文件
-  updateLocalAvatarFile: (originUrl) => ipcRenderer.invoke('update:avatar-file', originUrl),
+  user: {
+    // 选择头像时候的时候,需要打开的文件选择框
+    selectFile: () => ipcRenderer.invoke('dialog:openImageFile'),
+    // 头像更新完,更新本地头像文件
+    updateLocalAvatarFile: (originUrl) => ipcRenderer.invoke('update:avatar-file', originUrl)
+  },
+
+  background: {
+    // 添加背景时候的,打开文件选择框
+    handleBackgroundAddImage: (uuidCallBack) =>
+      ipcRenderer.invoke('background:dialog:openImageFile', uuidCallBack)
+  },
+
   // 同步本地appconfig文件数据
   synchronizeLocalAppConfigFile: (appConfig, type) =>
     ipcRenderer.send('synchronize-local-app-config-file', appConfig, type),

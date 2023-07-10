@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import { uuid } from 'xijs'
 
 const menuList = ref([
   {
@@ -17,6 +18,7 @@ const menuList = ref([
 const menuClick = function (menuId) {
   switch (menuId) {
     case 'add':
+      window.api.background.handleBackgroundAddImage()
       window.api.synchronizeLocalAppConfigFile('背景切换目录添加图片之后')
       break
 

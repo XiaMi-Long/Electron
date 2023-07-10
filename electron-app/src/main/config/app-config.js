@@ -10,6 +10,7 @@ export const appConfig = {
     userAvatarFileName: 'avatar.jpg'
   },
   background: {
+    imagePath: '/images/background/',
     imageList: []
   }
 }

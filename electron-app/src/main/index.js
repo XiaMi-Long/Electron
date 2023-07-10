@@ -4,7 +4,10 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { initFileConfig, handleInitRenderer } from './module/init'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { writeLog, pushLog, writeLogs, clearLogs } from './common/log'
-import { handleSynchronizeLocalAppConfigFile } from './module/background/file'
+import {
+  handleBackgroundAddImage,
+  handleSynchronizeLocalAppConfigFile
+} from './module/background/file'
 import { handleImageFileOpen, handleUpdateLocalAvatarFile } from './module/user/file'
 
 function createWindow() {
@@ -69,6 +72,9 @@ app.whenReady().then(() => {
   ipcMain.handle('dialog:openImageFile', handleImageFileOpen)
   // 监听更新本地头像文件
   ipcMain.handle('update:avatar-file', handleUpdateLocalAvatarFile)
+  // 监听用户上传背景图片
+  ipcMain.handle('background:dialog:openImageFile', handleBackgroundAddImage)
+
   // 监听同步本地appconfig文件数据
   ipcMain.on('synchronize-local-app-config-file', handleSynchronizeLocalAppConfigFile)
   // 监听写入日志操作

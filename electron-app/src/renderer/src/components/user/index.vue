@@ -9,11 +9,11 @@ const message = useMessage()
 const showLoading = ref(false)
 
 const uploadLocalFile = async function () {
-  const { url, originUrl } = await window.api.selectFile()
+  const { url, originUrl } = await window.api.user.selectFile()
   showLoading.value = true
   store.setUserAvatarBase64(url)
   // 通知主进程copy图片
-  const result = window.api.updateLocalAvatarFile(originUrl)
+  const result = window.api.user.updateLocalAvatarFile(originUrl)
   if (result) {
     message.success('图片上传成功')
     showLoading.value = false
