@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
-import { uuid } from 'xijs'
 
+const showLoading = ref(false)
 const menuList = ref([
   {
     menuId: 'add',
@@ -15,11 +15,18 @@ const menuList = ref([
  * 菜单点击的回调
  * @param {string} menuId 菜单唯一id
  */
-const menuClick = function (menuId) {
+const menuClick = async function (menuId) {
   switch (menuId) {
     case 'add':
-      window.api.background.handleBackgroundAddImage()
+      debugger
+      showLoading.value = true
+      const { errLogs } = await window.api.background.handleBackgroundAddImage()
+      console.log(errLogs)
+      if (errLogs.length > 0) {
+      }
+
       window.api.synchronizeLocalAppConfigFile('背景切换目录添加图片之后')
+      showLoading.value = false
       break
 
     default:
@@ -30,107 +37,116 @@ const menuClick = function (menuId) {
 </script>
 
 <template>
-  <div class="video-container">
-    <div class="image-container">
-      <n-grid x-gap="12" :y-gap="8" cols="4 xs:1 s:2 m:3 l:4" responsive="screen">
-        <n-gi>
-          <div class="card">
-            <n-image width="100%" height="200" src="/src/assets/1.png" />
-          </div>
-        </n-gi>
+  <n-spin :show="showLoading" class="loading-container">
+    <div class="video-container">
+      <div class="image-container">
+        <n-grid x-gap="12" :y-gap="8" cols="4 xs:1 s:2 m:3 l:4" responsive="screen">
+          <n-gi>
+            <div class="card">
+              <n-image width="100%" height="200" src="/src/assets/1.png" />
+            </div>
+          </n-gi>
 
-        <n-gi>
-          <div class="card">
-            <n-image width="100%" height="200" src="/src/assets/1.png" />
-          </div>
-        </n-gi>
+          <n-gi>
+            <div class="card">
+              <n-image width="100%" height="200" src="/src/assets/1.png" />
+            </div>
+          </n-gi>
 
-        <n-gi>
-          <div class="card">
-            <n-image width="100%" height="200" src="/src/assets/1.png" />
-          </div>
-        </n-gi>
+          <n-gi>
+            <div class="card">
+              <n-image width="100%" height="200" src="/src/assets/1.png" />
+            </div>
+          </n-gi>
 
-        <n-gi>
-          <div class="card">
-            <n-image width="100%" height="200" src="/src/assets/1.png" />
-          </div>
-        </n-gi>
-      </n-grid>
-    </div>
-    <div class="menu-container">
-      <div
-        class="menu-list"
-        v-for="(item, index) of menuList"
-        :key="index"
-        @click="menuClick(item.menuId)"
-      >
-        <span v-if="item.icon === undefined">{{ item.text }}</span>
-        <span v-if="item.icon">
-          <span v-html="item.icon"></span>
-        </span>
+          <n-gi>
+            <div class="card">
+              <n-image width="100%" height="200" src="/src/assets/1.png" />
+            </div>
+          </n-gi>
+        </n-grid>
+      </div>
+      <div class="menu-container">
+        <div
+          class="menu-list"
+          v-for="(item, index) of menuList"
+          :key="index"
+          @click="menuClick(item.menuId)"
+        >
+          <span v-if="item.icon === undefined">{{ item.text }}</span>
+          <span v-if="item.icon">
+            <span v-html="item.icon"></span>
+          </span>
+        </div>
       </div>
     </div>
-  </div>
+  </n-spin>
 </template>
 
 <style scoped lang="scss">
-.video-container {
-  padding: 20px;
+.loading-container {
   height: 100%;
-  box-sizing: border-box;
 
-  overflow: auto;
-
-  .image-container {
-    height: 90%;
+  :deep(.n-spin-content) {
+    height: 100%;
   }
+  .video-container {
+    padding: 20px;
+    height: 100%;
+    box-sizing: border-box;
 
-  .menu-container {
-    height: 10%;
+    overflow: auto;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    .image-container {
+      height: 90%;
+    }
 
-    .menu-list {
-      width: 5%;
-      height: 80%;
-      border-radius: 50%;
-
-      cursor: pointer;
-
-      font-size: 35px;
-
-      color: white;
-
-      background-color: #94ddf9;
+    .menu-container {
+      height: 10%;
 
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-  }
 
-  .card {
-    width: 100%;
-    height: 200px;
+      .menu-list {
+        width: 5%;
+        height: 80%;
+        border-radius: 50%;
 
-    background-color: white;
+        cursor: pointer;
 
-    // margin-right: 20px;
+        font-size: 35px;
 
-    :deep(.n-image) {
-      width: 100%;
+        color: white;
 
-      img {
-        transition: all 0.5s;
-        width: 100%;
+        background-color: #94ddf9;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
+    }
 
-      img:hover {
-        filter: brightness(125%);
-        transform: scale(1.05);
+    .card {
+      width: 100%;
+      height: 200px;
+
+      background-color: white;
+
+      // margin-right: 20px;
+
+      :deep(.n-image) {
+        width: 100%;
+
+        img {
+          transition: all 0.5s;
+          width: 100%;
+        }
+
+        img:hover {
+          filter: brightness(125%);
+          transform: scale(1.05);
+        }
       }
     }
   }
