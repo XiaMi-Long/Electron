@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { enumConfig } from '@renderer/config/menu'
 import { appConfig } from '@renderer/config/app'
 import { useUserStore } from '@renderer/paina/user'
+import { getAllKeepAlive } from '@renderer/router/index'
 
 const router = useRouter()
 const store = useUserStore()
@@ -59,7 +60,9 @@ onMounted(() => {
     <div class="content">
       <router-view v-slot="{ Component, route }">
         <transition name="fade" enter-active-class="animate__animated animate__fadeInDown">
-          <component :is="Component" :key="route.path" />
+          <KeepAlive :include="getAllKeepAlive()">
+            <component :is="Component" />
+          </KeepAlive>
         </transition>
       </router-view>
     </div>

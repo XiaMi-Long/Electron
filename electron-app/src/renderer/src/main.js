@@ -16,7 +16,8 @@ import {
   NGrid,
   NGridItem,
   NSpin,
-  NMessageProvider
+  NMessageProvider,
+  NNotificationProvider
 } from 'naive-ui'
 
 const pinia = createPinia()
@@ -32,7 +33,8 @@ const naive = create({
     NGrid,
     NGridItem,
     NSpin,
-    NMessageProvider
+    NMessageProvider,
+    NNotificationProvider
   ]
 })
 

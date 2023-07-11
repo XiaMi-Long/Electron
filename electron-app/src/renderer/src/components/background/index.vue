@@ -1,6 +1,8 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useNotification } from 'naive-ui'
 
+const notification = useNotification()
 const showLoading = ref(false)
 const menuList = ref([
   {
@@ -10,6 +12,7 @@ const menuList = ref([
     menuName: '添加图片'
   }
 ])
+const imageList = ref([])
 
 /**
  * 菜单点击的回调
@@ -18,12 +21,30 @@ const menuList = ref([
 const menuClick = async function (menuId) {
   switch (menuId) {
     case 'add':
-      debugger
       showLoading.value = true
-      const { errLogs } = await window.api.background.handleBackgroundAddImage()
-      console.log(errLogs)
+      const { errLogs, result } = await window.api.background.handleBackgroundAddImage()
       if (errLogs.length > 0) {
+        errLogs.forEach((item) => {
+          notification.error({
+            content: '上传文件出现错误',
+            meta: item
+          })
+        })
       }
+
+      // 渲染图片
+      result.forEach(({ buff, img }) => {
+        const blob = new Blob([buff], { type: 'image/jpeg' })
+        const reader = new FileReader()
+        reader.addEventListener(
+          'load',
+          () => {
+            imageList.value.push({ url: reader.result, img })
+          },
+          false
+        )
+        reader.readAsDataURL(blob)
+      })
 
       window.api.synchronizeLocalAppConfigFile('背景切换目录添加图片之后')
       showLoading.value = false
@@ -34,6 +55,24 @@ const menuClick = async function (menuId) {
       break
   }
 }
+
+/**
+ * 页面初始化的时候,读取配置文件里面的图片
+ */
+const initRendererImage = async function () {
+  window.api.background.initRendererImage()
+}
+
+onMounted(() => {
+  console.log(1)
+  initRendererImage()
+})
+</script>
+
+<script>
+export default {
+  name: 'Background'
+}
 </script>
 
 <template>
@@ -41,27 +80,9 @@ const menuClick = async function (menuId) {
     <div class="video-container">
       <div class="image-container">
         <n-grid x-gap="12" :y-gap="8" cols="4 xs:1 s:2 m:3 l:4" responsive="screen">
-          <n-gi>
+          <n-gi v-for="(item, index) of imageList" :key="index">
             <div class="card">
-              <n-image width="100%" height="200" src="/src/assets/1.png" />
-            </div>
-          </n-gi>
-
-          <n-gi>
-            <div class="card">
-              <n-image width="100%" height="200" src="/src/assets/1.png" />
-            </div>
-          </n-gi>
-
-          <n-gi>
-            <div class="card">
-              <n-image width="100%" height="200" src="/src/assets/1.png" />
-            </div>
-          </n-gi>
-
-          <n-gi>
-            <div class="card">
-              <n-image width="100%" height="200" src="/src/assets/1.png" />
+              <n-image width="100%" height="200" :src="item.url" />
             </div>
           </n-gi>
         </n-grid>

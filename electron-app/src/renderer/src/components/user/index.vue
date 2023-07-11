@@ -25,6 +25,12 @@ const uploadLocalFile = async function () {
 }
 </script>
 
+<script>
+export default {
+  name: 'User'
+}
+</script>
+
 <template>
   <div class="user-container">
     <n-spin :show="showLoading">

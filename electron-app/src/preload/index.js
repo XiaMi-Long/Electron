@@ -13,6 +13,8 @@ const api = {
   },
 
   background: {
+    // 打开背景页面的时候,读取本地的文件回显
+    initRendererImage: () => ipcRenderer.invoke('background:init:rendererImage'),
     // 添加背景时候的,打开文件选择框
     handleBackgroundAddImage: (uuidCallBack) =>
       ipcRenderer.invoke('background:dialog:openImageFile', uuidCallBack)

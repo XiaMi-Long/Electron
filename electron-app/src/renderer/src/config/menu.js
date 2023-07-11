@@ -1,4 +1,3 @@
-import { appConfig } from './app'
 export const enumConfig = [
   {
     id: 'background',

@@ -1,6 +1,6 @@
 import { app } from 'electron'
 
-export const appConfig = {
+let appConfig = {
   systemFileAddress: app.getAppPath(),
   appConfigFileName: 'app-config.json',
   appLogFileName: 'app-log.txt',
@@ -14,3 +14,7 @@ export const appConfig = {
     imageList: []
   }
 }
+
+const setAppConfig = (config) => (appConfig = config)
+
+export { appConfig, setAppConfig }

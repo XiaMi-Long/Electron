@@ -4,10 +4,8 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { initFileConfig, handleInitRenderer } from './module/init'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { writeLog, pushLog, writeLogs, clearLogs } from './common/log'
-import {
-  handleBackgroundAddImage,
-  handleSynchronizeLocalAppConfigFile
-} from './module/background/file'
+import { handleBackgroundAddImage, initRendererImage } from './module/background/file'
+import { handleSynchronizeLocalAppConfigFile } from './common/index'
 import { handleImageFileOpen, handleUpdateLocalAvatarFile } from './module/user/file'
 
 function createWindow() {
@@ -72,6 +70,8 @@ app.whenReady().then(() => {
   ipcMain.handle('dialog:openImageFile', handleImageFileOpen)
   // 监听更新本地头像文件
   ipcMain.handle('update:avatar-file', handleUpdateLocalAvatarFile)
+  // 监听打开背景页面,读取本地配置图片
+  ipcMain.handle('background:init:rendererImage', initRendererImage)
   // 监听用户上传背景图片
   ipcMain.handle('background:dialog:openImageFile', handleBackgroundAddImage)
 

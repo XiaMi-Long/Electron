@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 import avatar from '../../../resources/avatar.jpg?asset'
-import { appConfig } from '../config/app-config'
+import { appConfig, setAppConfig } from '../config/app-config'
 import { pushLog, writeLogs, clearLogs } from '../common/log'
 
 /**
@@ -97,15 +97,27 @@ const initAppConfig = async function () {
   const appConfigFilePath = path.join(appConfigFolderPath, appConfigFileName)
   const isConfigFilePathAvailable = await fs.existsSync(appConfigFolderPath)
   const writeAppConfigFile = function () {
-    // 如果路径文件存在就不创建文件
+    // 如果路径文件存在就不创建文件,如果存在,就同步appconfig
     if (fs.existsSync(appConfigFilePath)) {
+      fs.readFile(appConfigFilePath, { encoding: 'utf-8' }, (err, data) => {
+        if (err) {
+          writeLog(`同步${appConfigFilePath}文件失败`)
+          throw err
+        }
+
+        if (!err) {
+          setAppConfig(JSON.parse(data))
+          console.log(appConfig)
+        }
+      })
       return
     }
 
-    const jsonData = JSON.stringify(appConfig)
+    // 处理\\字符串,把\\字符串转为\\\\字符
+    const jsonData = JSON.stringify(appConfig).replace(/\\\\/g, '\\\\\\\\')
 
     // 开始创建日志文件
-    fs.writeFile(appConfigFilePath, jsonData, (err2) => {
+    fs.writeFile(appConfigFilePath, jsonData, { encoding: 'utf8' }, (err2) => {
       if (err2) {
         clearLogs()
         throw new Error(`创建${appConfigFilePath}文件失败`)

@@ -24,6 +24,8 @@ export const handleBackgroundAddImage = async function (event) {
   if (!canceled) {
     // 记录出现的问题日志
     const errLogs = []
+    // 每条的数据记录
+    const result = []
     const localFilePath = path.join(appConfig.systemFileAddress, appConfig.background.imagePath)
     // 查看是否有存储图片的本地目录
     const isFilePathAvailable = await fs.existsSync(localFilePath)
@@ -66,42 +68,31 @@ export const handleBackgroundAddImage = async function (event) {
       const filePath = path.join(appConfig.systemFileAddress, imagePath, image.fileId + extname)
 
       // 如果有后缀就用uuid加后缀的存储方式
-      fs.writeFile(filePath, fileBuffer, (err) => {
-        if (err) {
-          writeLog(`${fileItem}文件读取失败`, 'error')
-          errLogs.push(`${image.originImageName}文件读取失败`)
-          return
-        }
+      const err = fs.writeFileSync(filePath, fileBuffer)
+      if (err) {
+        writeLog(`${fileItem}文件读取失败`, 'error')
+        errLogs.push(`${image.originImageName}文件读取失败`)
+        return
+      }
 
-        if (!err) {
-          writeLog(`${fileItem}文件上传完成`, 'success')
-          image.path = filePath
-          appConfig.background.imageList.push(image)
-        }
-      })
+      if (!err) {
+        writeLog(`${fileItem}文件上传完成`, 'success')
+        result.push({ buff: fileBuffer, img: image })
+        image.path = filePath
+        appConfig.background.imageList.push(image)
+      }
     })
 
     return {
-      errLogs
+      errLogs,
+      result
     }
   }
 }
 
 /**
- * 同步本地appconfig文件数据
- * @param {string} type 本地更新的标识字符串可以是任何值的字符串,可以用来表明什么操作之后进行的同步文件
+ * 打开背景页面的时候,读取本地的文件回显
  */
-export const handleSynchronizeLocalAppConfigFile = async function (event, type) {
-  const jsonData = JSON.stringify(appConfig)
-  const appConfigFilePath = path.join(appConfig.systemFileAddress, appConfig.appConfigFileName)
-  // 开始创建日志文件
-  fs.writeFile(appConfigFilePath, jsonData, (err2) => {
-    if (err2) {
-      writeLog(`在${type}之后更新同步${appConfigFilePath}文件失败`, 'error')
-    }
-
-    if (!err2) {
-      writeLog(`在${type}之后更新同步${appConfigFilePath}文件成功`, 'success')
-    }
-  })
+export const initRendererImage = async function () {
+  console.log(appConfig)
 }

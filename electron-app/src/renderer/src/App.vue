@@ -13,9 +13,11 @@ init()
 
 <template>
   <n-message-provider>
-    <div class="container">
-      <router-view></router-view>
-    </div>
+    <n-notification-provider>
+      <div class="container">
+        <router-view></router-view>
+      </div>
+    </n-notification-provider>
   </n-message-provider>
 </template>
 
