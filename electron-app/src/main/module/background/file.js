@@ -22,15 +22,15 @@ export const handleBackgroundAddImage = async function (event) {
     })
 
   if (!canceled) {
-    // 记录出现的问题日志
-    const errLogs = []
     // 每条的数据记录
     const result = []
+    // 记录出现的问题日志
+    const errLogs = []
     const localFilePath = path.join(appConfig.systemFileAddress, appConfig.background.imagePath)
     // 查看是否有存储图片的本地目录
     const isFilePathAvailable = await fs.existsSync(localFilePath)
 
-    // 如果不存在该目录,创建改目录再创建文件
+    // 如果不存在该目录,创建该目录再创建文件
     if (!isFilePathAvailable) {
       fs.mkdir(localFilePath, { recursive: true }, (err) => {
         if (err) {
@@ -94,5 +94,13 @@ export const handleBackgroundAddImage = async function (event) {
  * 打开背景页面的时候,读取本地的文件回显
  */
 export const initRendererImage = async function () {
-  console.log(appConfig)
+  const images = appConfig.background.imageList
+  const result = []
+  images.forEach((file) => {
+    // 读取文件
+    const fileBuffer = fs.readFileSync(file.path, { encoding: null })
+    result.push({ buff: fileBuffer, img: file })
+  })
+
+  return { result }
 }

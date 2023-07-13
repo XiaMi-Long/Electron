@@ -107,7 +107,6 @@ const initAppConfig = async function () {
 
         if (!err) {
           setAppConfig(JSON.parse(data))
-          console.log(appConfig)
         }
       })
       return
@@ -130,7 +129,7 @@ const initAppConfig = async function () {
     })
   }
 
-  // 如果不存在该目录,创建改目录再创建文件
+  // 如果不存在该目录,创建该目录再创建文件
   if (!isConfigFilePathAvailable) {
     fs.mkdir(appLogFolderPath, { recursive: true }, (err) => {
       if (err) {

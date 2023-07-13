@@ -31,20 +31,7 @@ const menuClick = async function (menuId) {
           })
         })
       }
-
-      // 渲染图片
-      result.forEach(({ buff, img }) => {
-        const blob = new Blob([buff], { type: 'image/jpeg' })
-        const reader = new FileReader()
-        reader.addEventListener(
-          'load',
-          () => {
-            imageList.value.push({ url: reader.result, img })
-          },
-          false
-        )
-        reader.readAsDataURL(blob)
-      })
+      rendererImage(result)
 
       window.api.synchronizeLocalAppConfigFile('背景切换目录添加图片之后')
       showLoading.value = false
@@ -60,11 +47,31 @@ const menuClick = async function (menuId) {
  * 页面初始化的时候,读取配置文件里面的图片
  */
 const initRendererImage = async function () {
-  window.api.background.initRendererImage()
+  const { result } = await window.api.background.initRendererImage()
+  rendererImage(result)
+}
+
+/**
+ * 渲染图片的公共方法
+ * @param {*} data 数据源
+ */
+const rendererImage = function (data) {
+  // 渲染图片
+  data.forEach(({ buff, img }) => {
+    const blob = new Blob([buff], { type: 'image/jpeg' })
+    const reader = new FileReader()
+    reader.addEventListener(
+      'load',
+      () => {
+        imageList.value.push({ url: reader.result, img })
+      },
+      false
+    )
+    reader.readAsDataURL(blob)
+  })
 }
 
 onMounted(() => {
-  console.log(1)
   initRendererImage()
 })
 </script>
@@ -83,6 +90,7 @@ export default {
           <n-gi v-for="(item, index) of imageList" :key="index">
             <div class="card">
               <n-image width="100%" height="200" :src="item.url" />
+              <div class="overlay">123123</div>
             </div>
           </n-gi>
         </n-grid>
@@ -154,7 +162,9 @@ export default {
 
       background-color: white;
 
-      // margin-right: 20px;
+      position: relative;
+
+      overflow: hidden;
 
       :deep(.n-image) {
         width: 100%;
@@ -165,9 +175,25 @@ export default {
         }
 
         img:hover {
-          filter: brightness(125%);
-          transform: scale(1.05);
+          filter: brightness(115%);
         }
+      }
+
+      .overlay {
+        position: absolute;
+        top: 0;
+        right: -20%; /* 初始化隐藏 */
+        width: 20%;
+        height: 100%;
+        background-color: white;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        transition: right 0.3s ease;
+      }
+
+      &:hover .overlay {
+        right: 0%;
       }
     }
   }
