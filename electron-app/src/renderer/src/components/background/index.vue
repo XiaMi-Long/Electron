@@ -3,37 +3,47 @@ import { ref, onMounted } from 'vue'
 import { useNotification } from 'naive-ui'
 
 const notification = useNotification()
+const form = ref({
+  updateTime: ''
+})
+const rules = {
+  updateTime: [
+    {
+      required: true,
+      validator(rule, value) {
+        if (!value) {
+          return new Error('请输入')
+        }
+
+        return true
+      },
+      trigger: ['input', 'blur']
+    }
+  ]
+}
 const drawer = ref(false)
-const showLoading = ref(false)
 const imageList = ref([])
+const showLoading = ref(false)
 
 /**
- * 菜单点击的回调
- * @param {string} menuId 菜单唯一id
+ * 设置图标点击的回调
  */
-const menuClick = async function (menuId) {
-  switch (menuId) {
-    case 'add':
-      showLoading.value = true
-      const { errLogs, result } = await window.api.background.handleBackgroundAddImage()
-      if (errLogs.length > 0) {
-        errLogs.forEach((item) => {
-          notification.error({
-            content: '上传文件出现错误',
-            meta: item
-          })
-        })
-      }
-      rendererImage(result)
+const settingClick = async function () {
+  drawer.value = true
+  // showLoading.value = true
+  // const { errLogs, result } = await window.api.background.handleBackgroundAddImage()
+  // if (errLogs.length > 0) {
+  //   errLogs.forEach((item) => {
+  //     notification.error({
+  //       content: '上传文件出现错误',
+  //       meta: item
+  //     })
+  //   })
+  // }
+  // rendererImage(result)
 
-      window.api.synchronizeLocalAppConfigFile('背景切换目录添加图片之后')
-      showLoading.value = false
-      break
-
-    default:
-      window.api.logs.writeLog('背景切换目录下的添加图片出现未知错误', 'error')
-      break
-  }
+  // window.api.synchronizeLocalAppConfigFile('背景切换目录添加图片之后')
+  // showLoading.value = false
 }
 
 /**
@@ -66,10 +76,6 @@ const rendererImage = function (data) {
 
 onMounted(() => {
   initRendererImage()
-
-  setTimeout(() => {
-    drawer.value = true
-  }, 2000)
 })
 </script>
 
@@ -95,20 +101,31 @@ export default {
         </n-grid>
       </div>
       <div class="menu-container">
-        <div class="menu-list">123123</div>
+        <div class="setting">
+          <img
+            @click="settingClick"
+            class="setting-icon"
+            src="/src/assets/img/setting.png"
+            alt=""
+            width="40"
+            height="40"
+          />
+        </div>
       </div>
     </div>
 
     <n-drawer
       v-model:show="drawer"
-      :width="200"
+      :width="500"
       :height="200"
       placement="right"
       :trap-focus="false"
       :block-scroll="false"
     >
       <n-drawer-content title="页面设置">
-        《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说。
+        <n-form-item label="更新间隔（分钟）" :rules="rules">
+          <n-input v-model:value="form.updateTime" placeholder="单位:分钟" />
+        </n-form-item>
       </n-drawer-content>
     </n-drawer>
   </n-spin>
@@ -134,15 +151,22 @@ export default {
 
     .menu-container {
       position: fixed;
-      left: 50%;
-      bottom: 10%;
+      right: 1%;
+      bottom: 50%;
 
       display: flex;
       align-items: center;
       justify-content: center;
 
-      .menu-list {
+      .setting {
         cursor: pointer;
+
+        .setting-icon {
+          transition: all 1s;
+          &:hover {
+            transform: scale(1.2) rotate(0.5turn);
+          }
+        }
       }
     }
 
@@ -170,15 +194,22 @@ export default {
       }
 
       .overlay {
+        cursor: pointer;
+
         position: absolute;
+
         top: 0;
         right: -20%; /* 初始化隐藏 */
+
         width: 20%;
         height: 100%;
+
         background-color: white;
+
         display: flex;
         align-items: center;
         justify-content: center;
+
         transition: right 0.3s ease;
       }
 

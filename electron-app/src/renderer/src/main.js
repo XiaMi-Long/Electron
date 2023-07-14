@@ -19,7 +19,9 @@ import {
   NMessageProvider,
   NNotificationProvider,
   NDrawer,
-  NDrawerContent
+  NDrawerContent,
+  NFormItem,
+  NInput
 } from 'naive-ui'
 
 const pinia = createPinia()
@@ -38,7 +40,9 @@ const naive = create({
     NMessageProvider,
     NNotificationProvider,
     NDrawer,
-    NDrawerContent
+    NDrawerContent,
+    NFormItem,
+    NInput
   ]
 })
 
