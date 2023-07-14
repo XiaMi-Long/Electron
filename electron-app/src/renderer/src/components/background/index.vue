@@ -3,15 +3,8 @@ import { ref, onMounted } from 'vue'
 import { useNotification } from 'naive-ui'
 
 const notification = useNotification()
+const drawer = ref(false)
 const showLoading = ref(false)
-const menuList = ref([
-  {
-    menuId: 'add',
-    text: '+',
-    icon: undefined,
-    menuName: '添加图片'
-  }
-])
 const imageList = ref([])
 
 /**
@@ -73,6 +66,10 @@ const rendererImage = function (data) {
 
 onMounted(() => {
   initRendererImage()
+
+  setTimeout(() => {
+    drawer.value = true
+  }, 2000)
 })
 </script>
 
@@ -84,31 +81,36 @@ export default {
 
 <template>
   <n-spin :show="showLoading" class="loading-container">
-    <div class="video-container">
+    <div id="video-container" class="video-container">
       <div class="image-container">
         <n-grid x-gap="12" :y-gap="8" cols="4 xs:1 s:2 m:3 l:4" responsive="screen">
           <n-gi v-for="(item, index) of imageList" :key="index">
             <div class="card">
               <n-image width="100%" height="200" :src="item.url" />
-              <div class="overlay">123123</div>
+              <div class="overlay">
+                <img src="/src/assets/img/delete.png" alt="" width="48" height="48" />
+              </div>
             </div>
           </n-gi>
         </n-grid>
       </div>
       <div class="menu-container">
-        <div
-          class="menu-list"
-          v-for="(item, index) of menuList"
-          :key="index"
-          @click="menuClick(item.menuId)"
-        >
-          <span v-if="item.icon === undefined">{{ item.text }}</span>
-          <span v-if="item.icon">
-            <span v-html="item.icon"></span>
-          </span>
-        </div>
+        <div class="menu-list">123123</div>
       </div>
     </div>
+
+    <n-drawer
+      v-model:show="drawer"
+      :width="200"
+      :height="200"
+      placement="right"
+      :trap-focus="false"
+      :block-scroll="false"
+    >
+      <n-drawer-content title="页面设置">
+        《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说。
+      </n-drawer-content>
+    </n-drawer>
   </n-spin>
 </template>
 
@@ -127,32 +129,20 @@ export default {
     overflow: auto;
 
     .image-container {
-      height: 90%;
+      height: 100%;
     }
 
     .menu-container {
-      height: 10%;
+      position: fixed;
+      left: 50%;
+      bottom: 10%;
 
       display: flex;
       align-items: center;
       justify-content: center;
 
       .menu-list {
-        width: 5%;
-        height: 80%;
-        border-radius: 50%;
-
         cursor: pointer;
-
-        font-size: 35px;
-
-        color: white;
-
-        background-color: #94ddf9;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
       }
     }
 
@@ -188,7 +178,7 @@ export default {
         background-color: white;
         display: flex;
         align-items: center;
-        justify-content: flex-end;
+        justify-content: center;
         transition: right 0.3s ease;
       }
 

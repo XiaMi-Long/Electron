@@ -94,3 +94,5 @@
 【2023-07-11 14:59:34】success：在背景切换目录添加图片之后之后更新同步D:\Electron\electron-app\app-config.json文件成功
 【2023-07-11 15:01:33】success：C:\Users\HASEE\OneDrive\图片\头像\20210122154324_ca8a9.jpg文件上传完成
 【2023-07-11 15:01:33】success：在背景切换目录添加图片之后之后更新同步D:\Electron\electron-app\app-config.json文件成功
+【2023-07-14 10:04:42】success：C:\Users\HASEE\OneDrive\图片\头像\20210413094012_3193e.jpg文件上传完成
+【2023-07-14 10:04:42】success：在背景切换目录添加图片之后之后更新同步D:\Electron\electron-app\app-config.json文件成功
