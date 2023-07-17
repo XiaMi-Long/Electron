@@ -3,6 +3,7 @@ import icon from '../../resources/icon.png?asset'
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { initFileConfig, handleInitRenderer } from './module/init'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import { handleStart } from './module/background/service'
 import { writeLog, pushLog, writeLogs, clearLogs } from './common/log'
 import { handleBackgroundAddImage, initRendererImage } from './module/background/file'
 import { handleSynchronizeLocalAppConfigFile } from './common/index'
@@ -75,6 +76,8 @@ app.whenReady().then(() => {
   // 监听用户上传背景图片
   ipcMain.handle('background:dialog:openImageFile', handleBackgroundAddImage)
 
+  // 监听背景切换开始
+  ipcMain.on('background-start', handleStart)
   // 监听同步本地appconfig文件数据
   ipcMain.on('synchronize-local-app-config-file', handleSynchronizeLocalAppConfigFile)
   // 监听写入日志操作

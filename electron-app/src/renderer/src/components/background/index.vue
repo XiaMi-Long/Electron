@@ -1,26 +1,42 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useNotification } from 'naive-ui'
+import { useMessage } from 'naive-ui'
+
+const message = useMessage()
 
 const notification = useNotification()
 const form = ref({
   updateTime: ''
 })
+const updateRules = [
+  {
+    value: '1',
+    label: '顺序切换'
+  },
+  {
+    value: '2',
+    label: '随机切换'
+  }
+]
 const rules = {
-  updateTime: [
-    {
-      required: true,
-      validator(rule, value) {
-        if (!value) {
-          return new Error('请输入')
-        }
+  updateTime: {
+    required: true,
+    validator(rule, value) {
+      if (!value) {
+        return new Error('请输入')
+      }
 
-        return true
-      },
-      trigger: ['input', 'blur']
-    }
-  ]
+      if (!/^\d+(\.\d)?$/.test(value)) {
+        return new Error('请输入整数,小数点后最多一位')
+      }
+
+      return true
+    },
+    trigger: ['input', 'blur']
+  }
 }
+const formRef = ref(null)
 const drawer = ref(false)
 const imageList = ref([])
 const showLoading = ref(false)
@@ -74,6 +90,22 @@ const rendererImage = function (data) {
   })
 }
 
+/**
+ * 开始切换按钮回调
+ * @param {Event} e 事件对象
+ */
+const handleValidateClick = function (e) {
+  e.preventDefault()
+  formRef.value?.validate((errors) => {
+    if (!errors) {
+      window.api.background.handleStart({ ...form.value })
+      message.success('启动成功')
+    } else {
+      message.error('表单填写错误')
+    }
+  })
+}
+
 onMounted(() => {
   initRendererImage()
 })
@@ -123,9 +155,26 @@ export default {
       :block-scroll="false"
     >
       <n-drawer-content title="页面设置">
-        <n-form-item label="更新间隔（分钟）" :rules="rules">
-          <n-input v-model:value="form.updateTime" placeholder="单位:分钟" />
-        </n-form-item>
+        <n-form ref="formRef" :model="form" :rules="rules">
+          <n-form-item label="更新间隔（分钟）" path="updateTime">
+            <n-input v-model:value="form.updateTime" placeholder="单位:分钟" />
+          </n-form-item>
+
+          <n-form-item label="更新规格">
+            <n-radio-group v-model:value="form.updateRules">
+              <n-space>
+                <n-radio v-for="item in updateRules" :key="item.value" :value="item.value">
+                  {{ item.label }}
+                </n-radio>
+              </n-space>
+            </n-radio-group>
+          </n-form-item>
+        </n-form>
+
+        <n-space>
+          <n-button type="info" @click="handleValidateClick"> 开始 </n-button>
+          <n-button type="error"> 取消 </n-button>
+        </n-space>
       </n-drawer-content>
     </n-drawer>
   </n-spin>

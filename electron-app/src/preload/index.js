@@ -17,7 +17,9 @@ const api = {
     initRendererImage: () => ipcRenderer.invoke('background:init:rendererImage'),
     // 添加背景时候的,打开文件选择框
     handleBackgroundAddImage: (uuidCallBack) =>
-      ipcRenderer.invoke('background:dialog:openImageFile', uuidCallBack)
+      ipcRenderer.invoke('background:dialog:openImageFile', uuidCallBack),
+    // 开始背景切换
+    handleStart: (form) => ipcRenderer.send('background-start', form)
   },
 
   // 同步本地appconfig文件数据

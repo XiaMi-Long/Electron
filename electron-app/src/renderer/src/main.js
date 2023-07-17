@@ -21,7 +21,10 @@ import {
   NDrawer,
   NDrawerContent,
   NFormItem,
-  NInput
+  NInput,
+  NRadio,
+  NRadioGroup,
+  NForm
 } from 'naive-ui'
 
 const pinia = createPinia()
@@ -42,7 +45,10 @@ const naive = create({
     NDrawer,
     NDrawerContent,
     NFormItem,
-    NInput
+    NForm,
+    NInput,
+    NRadio,
+    NRadioGroup
   ]
 })
 
