@@ -19,12 +19,24 @@ const api = {
     handleBackgroundAddImage: (uuidCallBack) =>
       ipcRenderer.invoke('background:dialog:openImageFile', uuidCallBack),
     // 开始背景切换
-    handleStart: (form) => ipcRenderer.send('background-start', form)
+    handleStart: (form) => ipcRenderer.send('background-start', form),
+    // 停止背景切换
+    handleStop: () => ipcRenderer.send('background-stop')
   },
 
   // 同步本地appconfig文件数据
   synchronizeLocalAppConfigFile: (appConfig, type) =>
     ipcRenderer.send('synchronize-local-app-config-file', appConfig, type),
+
+  get: {
+    // 获取appconfig配置
+    getAppConfig: () => ipcRenderer.invoke('get:get-appConfig')
+  },
+
+  common: {
+    synchronizeLocalAppConfigByRead: () => ipcRenderer.send('synchronizeLocalAppConfigByRead')
+  },
+
   // 日志操作
   logs: {
     // 一次性写入全部日志

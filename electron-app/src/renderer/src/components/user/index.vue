@@ -9,8 +9,14 @@ const message = useMessage()
 const showLoading = ref(false)
 
 const uploadLocalFile = async function () {
-  const { url, originUrl } = await window.api.user.selectFile()
   showLoading.value = true
+  const { url, originUrl, empty } = await window.api.user.selectFile()
+
+  if (empty) {
+    showLoading.value = false
+    return
+  }
+
   store.setUserAvatarBase64(url)
   // 通知主进程copy图片
   const result = window.api.user.updateLocalAvatarFile(originUrl)

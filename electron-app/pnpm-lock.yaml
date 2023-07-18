@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   '@electron-toolkit/preload':
     specifier: ^2.0.0
@@ -29,8 +33,8 @@ dependencies:
     specifier: '4'
     version: 4.2.2(vue@3.3.4)
   wallpaper:
-    specifier: ^7.0.0
-    version: 7.0.0
+    specifier: 5.0.1
+    version: 5.0.1
   xijs:
     specifier: ^1.2.6
     version: 1.2.6
@@ -3445,9 +3449,9 @@ packages:
       vue: 3.3.4
     dev: true
 
-  /wallpaper@7.0.0:
-    resolution: {integrity: sha512-PZy40Tkvb4tREX49D+DSP0xBoYa1xkbdBMyGKTAB+tHQFQxfY/0i2OW0YwF+PU4o2NBHOVf37IPLolP9gKAkxg==}
-    engines: {node: '>=16'}
+  /wallpaper@5.0.1:
+    resolution: {integrity: sha512-yB9sBVfosR+NVabo/Ej21hga5u55NQUUdDVoo4LwrLJDRA+ezzX4wmNGwl5yxx/fkBgTADMqLL8ldnfN8TI9hQ==}
+    engines: {node: '>=12'}
     dev: false
 
   /which@2.0.2:
@@ -3536,7 +3540,3 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false

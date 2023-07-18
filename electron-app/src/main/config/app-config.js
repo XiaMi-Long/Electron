@@ -16,5 +16,6 @@ let appConfig = {
 }
 
 const setAppConfig = (config) => (appConfig = config)
+const getAppConfig = () => appConfig
 
-export { appConfig, setAppConfig }
+export { appConfig, getAppConfig, setAppConfig }

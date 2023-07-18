@@ -17,10 +17,15 @@ export const handleImageFileOpen = async function () {
     .catch((err) => {
       writeLog(`{handleImageFileOpen方法}选择文件出现错误-${err}`, 'error')
     })
+
   if (!canceled) {
     const fileData = fs.readFileSync(filePaths[0], { encoding: 'base64' })
     const dataURL = `data:image/png;base64,${fileData}`
-    return { url: dataURL, originUrl: filePaths[0] }
+    return { url: dataURL, originUrl: filePaths[0], empty: false }
+  }
+
+  if (canceled) {
+    return { url: '', originUrl: '', empty: true }
   }
 }
 

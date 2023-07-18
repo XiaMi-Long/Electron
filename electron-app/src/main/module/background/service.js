@@ -1,7 +1,11 @@
 import { shuffle } from 'lodash'
 import { appConfig } from '../../config/app-config'
+const wallpaper = require('wallpaper')
 
-const setTimeout = null
+const service = {
+  isFirst: true,
+  isStop: false
+}
 
 /**
  * 分钟转换为秒数再转换为毫秒数
@@ -13,6 +17,33 @@ function minutesToMilliseconds(minutes) {
   const milliseconds = seconds * 1000
   return milliseconds
 }
+
+/**
+ * 设置背景图片
+ */
+async function setBackground(url) {
+  await wallpaper.set(url)
+}
+
+/**
+ * 递归定时器更新背景图片
+ */
+function recursiveTime(dataArray, interval) {
+  let index = 0
+
+  function executeTask() {
+    if (service.isStop) {
+      return
+    }
+
+    const { path } = dataArray[index]
+    index = (index + 1) % dataArray.length // 更新索引，循环取值
+    setBackground(path)
+    setTimeout(executeTask, interval)
+  }
+
+  setTimeout(executeTask, interval)
+}
 /**
  * 开启壁纸切换
  * 1. 根据参数来算出几分钟切换一次,是按什么规则进行切换
@@ -20,7 +51,6 @@ function minutesToMilliseconds(minutes) {
  * @param {*} form 用户填写的表单值
  */
 export const handleStart = function (event, form) {
-  console.log(form)
   const milliseconds = minutesToMilliseconds(Number(form.updateTime))
   let imagePaths = []
   // 顺序切换
@@ -32,8 +62,22 @@ export const handleStart = function (event, form) {
     imagePaths = shuffle(appConfig.background.imageList)
   }
 
-  setTimeout = setTimeout(() => {}, milliseconds)
+  if (service.isFirst === false) {
+    service.isStop = true
+    service.isFirst = true
+  }
 
-  console.log(imagePaths)
-  console.log(milliseconds)
+  // 第一次启动
+  if (service.isFirst === true) {
+    service.isStop = false
+    recursiveTime(imagePaths, milliseconds)
+    service.isFirst = false
+  }
+}
+
+/**
+ * 停止背景切换
+ */
+export const handleStop = function () {
+  service.isStop = true
 }

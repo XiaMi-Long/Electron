@@ -21,6 +21,15 @@ export const handleBackgroundAddImage = async function (event) {
       writeLog(`{handleSynchronizeLocalAppConfigFile方法}选择文件出现错误-${err}`, 'error')
     })
 
+  console.log(canceled)
+  if (canceled) {
+    return {
+      errLogs: [],
+      result: [],
+      empty: true
+    }
+  }
+
   if (!canceled) {
     // 每条的数据记录
     const result = []
@@ -85,7 +94,8 @@ export const handleBackgroundAddImage = async function (event) {
 
     return {
       errLogs,
-      result
+      result,
+      empty: false
     }
   }
 }

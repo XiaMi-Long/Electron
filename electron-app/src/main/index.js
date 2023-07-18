@@ -3,10 +3,14 @@ import icon from '../../resources/icon.png?asset'
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { initFileConfig, handleInitRenderer } from './module/init'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import { handleStart } from './module/background/service'
+import { getAppConfig } from './config/app-config'
+import { handleStart, handleStop } from './module/background/service'
 import { writeLog, pushLog, writeLogs, clearLogs } from './common/log'
 import { handleBackgroundAddImage, initRendererImage } from './module/background/file'
-import { handleSynchronizeLocalAppConfigFile } from './common/index'
+import {
+  handleSynchronizeLocalAppConfigFileByWrite,
+  handleSynchronizeLocalAppConfigFileByRead
+} from './common/index'
 import { handleImageFileOpen, handleUpdateLocalAvatarFile } from './module/user/file'
 
 function createWindow() {
@@ -75,11 +79,17 @@ app.whenReady().then(() => {
   ipcMain.handle('background:init:rendererImage', initRendererImage)
   // 监听用户上传背景图片
   ipcMain.handle('background:dialog:openImageFile', handleBackgroundAddImage)
+  // 监听渲染进程获取appconfig数据
+  ipcMain.handle('get:get-appConfig', getAppConfig)
 
+  // 监听是否要同步本地最新文件数据到内存
+  ipcMain.on('synchronizeLocalAppConfigByRead', handleSynchronizeLocalAppConfigFileByRead)
   // 监听背景切换开始
   ipcMain.on('background-start', handleStart)
+  // 监听背景切换停止
+  ipcMain.on('background-stop', handleStop)
   // 监听同步本地appconfig文件数据
-  ipcMain.on('synchronize-local-app-config-file', handleSynchronizeLocalAppConfigFile)
+  ipcMain.on('synchronize-local-app-config-file', handleSynchronizeLocalAppConfigFileByWrite)
   // 监听写入日志操作
   ipcMain.on('write-log', (event, str, type) => {
     writeLog(str, type)

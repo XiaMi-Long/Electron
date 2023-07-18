@@ -7,7 +7,8 @@ const message = useMessage()
 
 const notification = useNotification()
 const form = ref({
-  updateTime: ''
+  updateTime: '',
+  updateRules: '1'
 })
 const updateRules = [
   {
@@ -46,20 +47,6 @@ const showLoading = ref(false)
  */
 const settingClick = async function () {
   drawer.value = true
-  // showLoading.value = true
-  // const { errLogs, result } = await window.api.background.handleBackgroundAddImage()
-  // if (errLogs.length > 0) {
-  //   errLogs.forEach((item) => {
-  //     notification.error({
-  //       content: '上传文件出现错误',
-  //       meta: item
-  //     })
-  //   })
-  // }
-  // rendererImage(result)
-
-  // window.api.synchronizeLocalAppConfigFile('背景切换目录添加图片之后')
-  // showLoading.value = false
 }
 
 /**
@@ -91,19 +78,58 @@ const rendererImage = function (data) {
 }
 
 /**
+ * 上传图片
+ */
+const upload = async function () {
+  showLoading.value = true
+  const { errLogs, result, empty } = await window.api.background.handleBackgroundAddImage()
+  if (empty) {
+    showLoading.value = false
+    return
+  }
+
+  if (errLogs.length > 0) {
+    errLogs.forEach((item) => {
+      notification.error({
+        content: '上传文件出现错误',
+        meta: item
+      })
+    })
+  }
+  rendererImage(result)
+
+  window.api.synchronizeLocalAppConfigFile('背景切换目录添加图片之后')
+  showLoading.value = false
+}
+
+/**
  * 开始切换按钮回调
  * @param {Event} e 事件对象
  */
 const handleValidateClick = function (e) {
   e.preventDefault()
-  formRef.value?.validate((errors) => {
+  formRef.value?.validate(async (errors) => {
     if (!errors) {
+      const { background } = await window.api.get.getAppConfig()
+      if (background.imageList.length === 0) {
+        message.error('请上传至少一张图片')
+        return
+      }
+      window.api.common.synchronizeLocalAppConfigByRead()
       window.api.background.handleStart({ ...form.value })
       message.success('启动成功')
     } else {
       message.error('表单填写错误')
     }
   })
+}
+
+/**
+ * 取消背景切换
+ */
+const cancel = function () {
+  window.api.background.handleStop({ ...form.value })
+  message.success('取消成功')
 }
 
 onMounted(() => {
@@ -173,7 +199,8 @@ export default {
 
         <n-space>
           <n-button type="info" @click="handleValidateClick"> 开始 </n-button>
-          <n-button type="error"> 取消 </n-button>
+          <n-button type="error" @click="cancel"> 取消 </n-button>
+          <n-button type="success" @click="upload"> 上传图片 </n-button>
         </n-space>
       </n-drawer-content>
     </n-drawer>
