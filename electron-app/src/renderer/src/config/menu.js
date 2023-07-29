@@ -14,6 +14,13 @@ export const enumConfig = [
     isDefaultSelected: false
   },
   {
+    id: 'copycount',
+    menuName: 'CV记录器',
+    menuNameUrl: '/copycount',
+    menuIndex: 3,
+    isDefaultSelected: false
+  },
+  {
     id: 'setting',
     menuName: '软件设置',
     menuNameUrl: '/setting',

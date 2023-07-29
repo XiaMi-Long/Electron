@@ -24,7 +24,8 @@ import {
   NInput,
   NRadio,
   NRadioGroup,
-  NForm
+  NForm,
+  NScrollbar
 } from 'naive-ui'
 
 const pinia = createPinia()
@@ -48,7 +49,8 @@ const naive = create({
     NForm,
     NInput,
     NRadio,
-    NRadioGroup
+    NRadioGroup,
+    NScrollbar
   ]
 })
 

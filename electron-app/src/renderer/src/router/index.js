@@ -23,6 +23,14 @@ const routes = [
         }
       },
       {
+        name: 'CopyCount',
+        path: '/copycount',
+        component: () => import('@renderer/components/copy-count/index.vue'),
+        meta: {
+          keepAlive: true
+        }
+      },
+      {
         name: 'Setting',
         path: '/setting',
         component: () => import('@renderer/components/setting/index.vue'),

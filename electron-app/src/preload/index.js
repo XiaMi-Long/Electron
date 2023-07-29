@@ -18,6 +18,8 @@ const api = {
     // 添加背景时候的,打开文件选择框
     handleBackgroundAddImage: (uuidCallBack) =>
       ipcRenderer.invoke('background:dialog:openImageFile', uuidCallBack),
+    // 删除图片
+    handleDeleteImage: (imgUrl) => ipcRenderer.invoke('background:background-delete', imgUrl),
     // 开始背景切换
     handleStart: (form) => ipcRenderer.send('background-start', form),
     // 停止背景切换

@@ -103,6 +103,30 @@ const upload = async function () {
 }
 
 /**
+ * 删除图片
+ */
+const deleteImage = async function (imgItem) {
+  showLoading.value = true
+  const result = await window.api.background.handleDeleteImage(imgItem.img.path)
+  if (result) {
+    const index = imageList.value.findIndex((item) => item.img.fileId === imgItem.img.fileId)
+    if (index === -1) {
+      window.logs.writeLog('获取要删除的图片下标,没有找到', 'error')
+      message.error('删除图片失败,出现未知错误')
+      return
+    }
+    imageList.value.splice(index, 1)
+    message.error('删除图片成功')
+  }
+
+  if (!result) {
+    message.error('删除图片失败,请检查是否拥有删除的权限或是否有此图片')
+  }
+
+  showLoading.value = false
+}
+
+/**
  * 开始切换按钮回调
  * @param {Event} e 事件对象
  */
@@ -145,32 +169,34 @@ export default {
 
 <template>
   <n-spin :show="showLoading" class="loading-container">
-    <div id="video-container" class="video-container">
-      <div class="image-container">
-        <n-grid x-gap="12" :y-gap="8" cols="4 xs:1 s:2 m:3 l:4" responsive="screen">
-          <n-gi v-for="(item, index) of imageList" :key="index">
-            <div class="card">
-              <n-image width="100%" height="200" :src="item.url" />
-              <div class="overlay">
-                <img src="/src/assets/img/delete.png" alt="" width="48" height="48" />
+    <n-scrollbar>
+      <div id="video-container" class="video-container">
+        <div class="image-container">
+          <n-grid x-gap="12" :y-gap="8" cols="4 xs:1 s:2 m:3 l:4" responsive="screen">
+            <n-gi v-for="(item, index) of imageList" :key="index">
+              <div class="card">
+                <n-image width="100%" height="200" :src="item.url" />
+                <div class="overlay" @click="deleteImage(item)">
+                  <img src="/src/assets/img/delete.png" alt="" width="48" height="48" />
+                </div>
               </div>
-            </div>
-          </n-gi>
-        </n-grid>
-      </div>
-      <div class="menu-container">
-        <div class="setting">
-          <img
-            @click="settingClick"
-            class="setting-icon"
-            src="/src/assets/img/setting.png"
-            alt=""
-            width="40"
-            height="40"
-          />
+            </n-gi>
+          </n-grid>
+        </div>
+        <div class="menu-container">
+          <div class="setting">
+            <img
+              @click="settingClick"
+              class="setting-icon"
+              src="/src/assets/img/setting.png"
+              alt=""
+              width="40"
+              height="40"
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </n-scrollbar>
 
     <n-drawer
       v-model:show="drawer"

@@ -1,16 +1,38 @@
-import { join } from 'path'
-import icon from '../../resources/icon.png?asset'
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
-import { initFileConfig, handleInitRenderer } from './module/init'
+// NODE
+import path, { join } from 'path'
+
+// ELECTRON
+import { app, shell, BrowserWindow, ipcMain, Tray, Menu } from 'electron'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+
+// ICON
+import icon from '../../resources/icon.png?asset'
+import assets from './image/icon.png?asset'
+
+// INIT
+import { initFileConfig, handleInitRenderer } from './module/init'
+
+// CONFIG
 import { getAppConfig } from './config/app-config'
-import { handleStart, handleStop } from './module/background/service'
+
+// LOG
 import { writeLog, pushLog, writeLogs, clearLogs } from './common/log'
-import { handleBackgroundAddImage, initRendererImage } from './module/background/file'
+
+// BACKGROUND
+import { handleStart, handleStop } from './module/background/service'
+import {
+  handleBackgroundAddImage,
+  initRendererImage,
+  handleDeleteImage
+} from './module/background/file'
+
+// COMMON
 import {
   handleSynchronizeLocalAppConfigFileByWrite,
   handleSynchronizeLocalAppConfigFileByRead
 } from './common/index'
+
+// USER
 import { handleImageFileOpen, handleUpdateLocalAvatarFile } from './module/user/file'
 
 function createWindow() {
@@ -23,13 +45,14 @@ function createWindow() {
     // maxWidth: 1200,
     // maxHeight: 900,
     show: false,
-    minimizable: false,
+    // skipTaskbar: true,
     // autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
-    }
+    },
+    icon: assets
   })
 
   mainWindow.webContents.toggleDevTools()
@@ -58,6 +81,18 @@ function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+  const appTray = new Tray(assets)
+
+  // 监听点击托盘图标事件
+  // 点击托盘图标时显示/隐藏应用窗口
+  appTray.on('click', () => {
+    if (mainWindow.isVisible()) {
+      mainWindow.hide()
+    } else {
+      mainWindow.show()
+    }
+  })
+
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron')
   // 初始化配置文件
@@ -81,6 +116,8 @@ app.whenReady().then(() => {
   ipcMain.handle('background:dialog:openImageFile', handleBackgroundAddImage)
   // 监听渲染进程获取appconfig数据
   ipcMain.handle('get:get-appConfig', getAppConfig)
+  // 监听背景图片删除
+  ipcMain.handle('background:background-delete', handleDeleteImage)
 
   // 监听是否要同步本地最新文件数据到内存
   ipcMain.on('synchronizeLocalAppConfigByRead', handleSynchronizeLocalAppConfigFileByRead)
@@ -102,7 +139,29 @@ app.whenReady().then(() => {
     clearLogs()
   })
 
-  createWindow()
+  const mainWindow = createWindow()
+
+  const mainWindowCloseHandler = (event) => {
+    if (process.platform !== 'darwin') {
+      event.preventDefault()
+      mainWindow.hide()
+    }
+  }
+
+  mainWindow.on('close', mainWindowCloseHandler)
+
+  // 创建托盘菜单
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: '退出',
+      click: () => {
+        // 在退出之前解除主窗口的'close'事件监听
+        mainWindow.removeListener('close', mainWindowCloseHandler)
+        app.quit()
+      }
+    }
+  ])
+  appTray.setContextMenu(contextMenu)
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
@@ -118,6 +177,10 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()
   }
+})
+
+app.on('will-quit', () => {
+  console.log(1)
 })
 
 // In this file you can include the rest of your app"s specific main process

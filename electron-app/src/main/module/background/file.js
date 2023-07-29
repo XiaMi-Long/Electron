@@ -5,6 +5,7 @@ import { dialog } from 'electron'
 import { writeLog } from '../../common/log'
 import { generateUUID } from '../../common/uuid'
 import { appConfig } from '../../config/app-config'
+import { handleSynchronizeLocalAppConfigFileByWrite } from '../../common'
 
 /**
  * 处理背景页面选择图片
@@ -21,7 +22,6 @@ export const handleBackgroundAddImage = async function (event) {
       writeLog(`{handleSynchronizeLocalAppConfigFile方法}选择文件出现错误-${err}`, 'error')
     })
 
-  console.log(canceled)
   if (canceled) {
     return {
       errLogs: [],
@@ -98,6 +98,28 @@ export const handleBackgroundAddImage = async function (event) {
       empty: false
     }
   }
+}
+
+/**
+ * 处理背景页面删除图片
+ * @param {*} event
+ * @param {*} imgItem 图片自定义对象
+ */
+export const handleDeleteImage = async function (event, imgUrl) {
+  return new Promise((resolve, reject) => {
+    fs.unlink(imgUrl, (err) => {
+      if (err) {
+        writeLog(`文件路径:${imgUrl}删除失败`, 'error')
+        reject(false)
+      } else {
+        const { imageList } = appConfig.background
+        appConfig.background.imageList = imageList.filter((img) => img.path !== imgUrl)
+        handleSynchronizeLocalAppConfigFileByWrite(null, '切换背景页面:删除图片之后进行数据的同步')
+        writeLog(`文件路径:${imgUrl}删除成功`, 'success')
+        resolve(true)
+      }
+    })
+  })
 }
 
 /**
