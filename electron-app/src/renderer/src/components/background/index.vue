@@ -1,7 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useNotification } from 'naive-ui'
 import { useMessage } from 'naive-ui'
+import { useNotification } from 'naive-ui'
+import { ErrorFilled } from '@vicons/material'
 
 const message = useMessage()
 
@@ -223,10 +224,21 @@ export default {
           </n-form-item>
         </n-form>
 
-        <n-space>
-          <n-button type="info" @click="handleValidateClick"> 开始 </n-button>
-          <n-button type="error" @click="cancel"> 取消 </n-button>
-          <n-button type="success" @click="upload"> 上传图片 </n-button>
+        <n-space vertical>
+          <n-space>
+            <n-button type="info" @click="handleValidateClick"> 开始 </n-button>
+            <n-button type="error" @click="cancel"> 取消 </n-button>
+            <n-button type="success" @click="upload"> 上传图片 </n-button>
+          </n-space>
+
+          <n-space>
+            <div class="tip-text">
+              <n-icon size="15">
+                <ErrorFilled />
+              </n-icon>
+              <span> 删除图片会取消图片切换 </span>
+            </div>
+          </n-space>
         </n-space>
       </n-drawer-content>
     </n-drawer>
@@ -244,6 +256,8 @@ export default {
     padding: 20px;
     height: 100%;
     box-sizing: border-box;
+
+    background-color: white;
 
     overflow: auto;
 
@@ -320,5 +334,14 @@ export default {
       }
     }
   }
+}
+
+.tip-text {
+  display: flex;
+  align-items: center;
+
+  color: #777;
+
+  font-size: 12px;
 }
 </style>

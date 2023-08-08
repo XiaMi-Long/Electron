@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 
 import { dialog } from 'electron'
+import { handleStop } from './service'
 import { writeLog } from '../../common/log'
 import { generateUUID } from '../../common/uuid'
 import { appConfig } from '../../config/app-config'
@@ -115,6 +116,8 @@ export const handleDeleteImage = async function (event, imgUrl) {
         const { imageList } = appConfig.background
         appConfig.background.imageList = imageList.filter((img) => img.path !== imgUrl)
         handleSynchronizeLocalAppConfigFileByWrite(null, '切换背景页面:删除图片之后进行数据的同步')
+        // 停止背景切换
+        handleStop()
         writeLog(`文件路径:${imgUrl}删除成功`, 'success')
         resolve(true)
       }

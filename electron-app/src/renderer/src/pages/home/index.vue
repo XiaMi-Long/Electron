@@ -76,11 +76,8 @@ onMounted(() => {
 
   .menu {
     width: 200px;
-
-    border: 1px solid black;
-
     // background-color: #06603b;
-    background-color: #005276;
+    background-color: #f5f5f5;
 
     .list-box {
       height: 90%;
@@ -90,19 +87,21 @@ onMounted(() => {
         cursor: pointer;
         text-align: center;
 
-        color: white;
+        color: #777;
 
         .box {
           line-height: 2;
           &:hover {
-            background-color: #ffffff1a;
+            background-color: #ffffff;
             border-radius: 4px;
           }
         }
 
         .box-selected {
-          background-color: #ffffff1a;
+          background-color: #ffffff;
           border-radius: 4px;
+
+          color: #000;
         }
       }
     }

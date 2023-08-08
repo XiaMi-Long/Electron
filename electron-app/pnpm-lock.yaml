@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 dependencies:
   '@electron-toolkit/preload':
     specifier: ^2.0.0
@@ -11,6 +7,9 @@ dependencies:
   '@electron-toolkit/utils':
     specifier: ^1.0.2
     version: 1.0.2(electron@24.6.0)
+  '@vicons/material':
+    specifier: ^0.12.0
+    version: 0.12.0
   animate.css:
     specifier: ^4.1.1
     version: 4.1.1
@@ -853,6 +852,10 @@ packages:
     dependencies:
       '@types/node': 18.16.18
     optional: true
+
+  /@vicons/material@0.12.0:
+    resolution: {integrity: sha512-chv1CYAl8P32P3Ycwgd5+vw/OFNc2mtkKdb1Rw4T5IJmKy6GVDsoUKV3N2l208HATn7CCQphZtuPDdsm7K2kmA==}
+    dev: false
 
   /@vitejs/plugin-vue@4.2.3(vite@4.3.9)(vue@3.3.4):
     resolution: {integrity: sha512-R6JDUfiZbJA9cMiguQ7jxALsgiprjBeHL5ikpXfJCH62pPHtI+JdJ5xWj6Ev73yXSlYl86+blXn1kZHQ7uElxw==}
@@ -3540,3 +3543,7 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
