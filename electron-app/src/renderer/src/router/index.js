@@ -7,10 +7,20 @@ const routes = [
     component: () => import('@renderer/pages/home/index.vue'),
     children: [
       {
+        name: 'Util',
+        path: '/util',
+        component: () => import('@renderer/components/util/index.vue'),
+        meta: {
+          title: '工具集',
+          keepAlive: true
+        }
+      },
+      {
         name: 'Background',
         path: '/background',
         component: () => import('@renderer/components/background/index.vue'),
         meta: {
+          title: '背景切换',
           keepAlive: true
         }
       },
@@ -19,17 +29,11 @@ const routes = [
         path: '/user',
         component: () => import('@renderer/components/user/index.vue'),
         meta: {
+          title: '个人中心',
           keepAlive: true
         }
       },
-      {
-        name: 'CopyCount',
-        path: '/copycount',
-        component: () => import('@renderer/components/copy-count/index.vue'),
-        meta: {
-          keepAlive: true
-        }
-      },
+
       {
         name: 'Setting',
         path: '/setting',

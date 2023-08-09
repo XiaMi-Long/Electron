@@ -26,7 +26,11 @@ import {
   NRadioGroup,
   NForm,
   NScrollbar,
-  NIcon
+  NIcon,
+  NCard,
+  NBreadcrumb,
+  NBreadcrumbItem,
+  NSkeleton
 } from 'naive-ui'
 
 const pinia = createPinia()
@@ -52,7 +56,11 @@ const naive = create({
     NRadio,
     NRadioGroup,
     NScrollbar,
-    NIcon
+    NIcon,
+    NCard,
+    NBreadcrumb,
+    NBreadcrumbItem,
+    NSkeleton
   ]
 })
 

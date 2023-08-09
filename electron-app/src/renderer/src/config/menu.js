@@ -1,8 +1,8 @@
 export const enumConfig = [
   {
-    id: 'background',
-    menuName: '切换背景',
-    menuNameUrl: '/background',
+    id: 'util',
+    menuName: '工具集',
+    menuNameUrl: '/util',
     menuIndex: 1,
     isDefaultSelected: true
   },
@@ -11,13 +11,6 @@ export const enumConfig = [
     menuName: '个人中心',
     menuNameUrl: '/user',
     menuIndex: 2,
-    isDefaultSelected: false
-  },
-  {
-    id: 'copycount',
-    menuName: 'CV记录器',
-    menuNameUrl: '/copycount',
-    menuIndex: 3,
     isDefaultSelected: false
   },
   {

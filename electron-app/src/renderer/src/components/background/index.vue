@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useMessage } from 'naive-ui'
 import { useNotification } from 'naive-ui'
 import { ErrorFilled } from '@vicons/material'
+import goBack from '@renderer/components/go-back/index.vue'
 
 const message = useMessage()
 
@@ -70,12 +71,21 @@ const rendererImage = function (data) {
     reader.addEventListener(
       'load',
       () => {
-        imageList.value.push({ url: reader.result, img })
+        imageList.value.push({ url: reader.result, img, load: false })
       },
       false
     )
     reader.readAsDataURL(blob)
   })
+}
+
+/**
+ * 每个图片加载完成的回调
+ */
+const imageLoad = function (index) {
+  setTimeout(() => {
+    imageList.value[index].load = true
+  }, 2000)
 }
 
 /**
@@ -169,83 +179,99 @@ export default {
 </script>
 
 <template>
-  <n-spin :show="showLoading" class="loading-container">
-    <n-scrollbar>
-      <div id="video-container" class="video-container">
-        <div class="image-container">
-          <n-grid x-gap="12" :y-gap="8" cols="4 xs:1 s:2 m:3 l:4" responsive="screen">
-            <n-gi v-for="(item, index) of imageList" :key="index">
-              <div class="card">
-                <n-image width="100%" height="200" :src="item.url" />
-                <div class="overlay" @click="deleteImage(item)">
-                  <img src="/src/assets/img/delete.png" alt="" width="48" height="48" />
+  <div class="box">
+    <n-spin :show="showLoading" class="loading-container">
+      <n-scrollbar>
+        <div id="video-container" class="video-container">
+          <goBack />
+
+          <div class="image-container">
+            <n-grid x-gap="12" :y-gap="8" cols="4 xs:1 s:2 m:3 l:4" responsive="screen">
+              <n-gi v-for="(item, index) of imageList" :key="index">
+                <div class="card">
+                  <!-- 加载未完成之前展示骨架屏 -->
+                  <n-skeleton
+                    v-if="item.load === false"
+                    class="skeleton"
+                    height="200px"
+                    width="100%"
+                  />
+
+                  <n-image width="100%" height="200" :src="item.url" :on-load="imageLoad(index)" />
+                  <div class="overlay" @click="deleteImage(item)" v-show="item.load">
+                    <img src="/src/assets/img/delete.png" alt="" width="48" height="48" />
+                  </div>
                 </div>
-              </div>
-            </n-gi>
-          </n-grid>
-        </div>
-        <div class="menu-container">
-          <div class="setting">
-            <img
-              @click="settingClick"
-              class="setting-icon"
-              src="/src/assets/img/setting.png"
-              alt=""
-              width="40"
-              height="40"
-            />
+              </n-gi>
+            </n-grid>
+          </div>
+
+          <div class="menu-container">
+            <div class="setting">
+              <img
+                @click="settingClick"
+                class="setting-icon"
+                src="/src/assets/img/setting.png"
+                alt=""
+                width="40"
+                height="40"
+              />
+            </div>
           </div>
         </div>
-      </div>
-    </n-scrollbar>
+      </n-scrollbar>
 
-    <n-drawer
-      v-model:show="drawer"
-      :width="500"
-      :height="200"
-      placement="right"
-      :trap-focus="false"
-      :block-scroll="false"
-    >
-      <n-drawer-content title="页面设置">
-        <n-form ref="formRef" :model="form" :rules="rules">
-          <n-form-item label="更新间隔（分钟）" path="updateTime">
-            <n-input v-model:value="form.updateTime" placeholder="单位:分钟" />
-          </n-form-item>
+      <n-drawer
+        v-model:show="drawer"
+        :width="500"
+        :height="200"
+        placement="right"
+        :trap-focus="false"
+        :block-scroll="false"
+      >
+        <n-drawer-content title="页面设置">
+          <n-form ref="formRef" :model="form" :rules="rules">
+            <n-form-item label="更新间隔（分钟）" path="updateTime">
+              <n-input v-model:value="form.updateTime" placeholder="单位:分钟" />
+            </n-form-item>
 
-          <n-form-item label="更新规格">
-            <n-radio-group v-model:value="form.updateRules">
-              <n-space>
-                <n-radio v-for="item in updateRules" :key="item.value" :value="item.value">
-                  {{ item.label }}
-                </n-radio>
-              </n-space>
-            </n-radio-group>
-          </n-form-item>
-        </n-form>
+            <n-form-item label="更新规格">
+              <n-radio-group v-model:value="form.updateRules">
+                <n-space>
+                  <n-radio v-for="item in updateRules" :key="item.value" :value="item.value">
+                    {{ item.label }}
+                  </n-radio>
+                </n-space>
+              </n-radio-group>
+            </n-form-item>
+          </n-form>
 
-        <n-space vertical>
-          <n-space>
-            <n-button type="info" @click="handleValidateClick"> 开始 </n-button>
-            <n-button type="error" @click="cancel"> 取消 </n-button>
-            <n-button type="success" @click="upload"> 上传图片 </n-button>
+          <n-space vertical>
+            <n-space>
+              <n-button type="info" @click="handleValidateClick"> 开始 </n-button>
+              <n-button type="error" @click="cancel"> 取消 </n-button>
+              <n-button type="success" @click="upload"> 上传图片 </n-button>
+            </n-space>
+
+            <n-space>
+              <div class="tip-text">
+                <n-icon size="15">
+                  <ErrorFilled />
+                </n-icon>
+                <span> 删除图片会取消图片切换 </span>
+              </div>
+            </n-space>
           </n-space>
-
-          <n-space>
-            <div class="tip-text">
-              <n-icon size="15">
-                <ErrorFilled />
-              </n-icon>
-              <span> 删除图片会取消图片切换 </span>
-            </div>
-          </n-space>
-        </n-space>
-      </n-drawer-content>
-    </n-drawer>
-  </n-spin>
+        </n-drawer-content>
+      </n-drawer>
+    </n-spin>
+  </div>
 </template>
 
 <style scoped lang="scss">
+.box {
+  background-color: #fff;
+}
 .loading-container {
   height: 100%;
 
