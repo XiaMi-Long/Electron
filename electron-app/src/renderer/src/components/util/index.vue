@@ -11,9 +11,9 @@ const pageList = ref([
     pageUrl: '/background'
   },
   {
-    pageName: '简单记录',
-    pageDescribe: '可以实现简单的记录待办功能',
-    pageUrl: '/background'
+    pageName: '短信提醒',
+    pageDescribe: '可以实现短信提醒功能来进行提示',
+    pageUrl: '/textMessageReminder'
   }
 ])
 

@@ -84,6 +84,10 @@ const rendererImage = function (data) {
  */
 const imageLoad = function (index) {
   setTimeout(() => {
+    if (imageList.value[index]) {
+      return
+    }
+
     imageList.value[index].load = true
   }, 2000)
 }
@@ -182,7 +186,7 @@ export default {
   <div class="box">
     <n-spin :show="showLoading" class="loading-container">
       <n-scrollbar>
-        <div id="video-container" class="video-container">
+        <div class="video-container">
           <goBack />
 
           <div class="image-container">
@@ -271,6 +275,8 @@ export default {
 <style scoped lang="scss">
 .box {
   background-color: #fff;
+
+  height: 100%;
 }
 .loading-container {
   height: 100%;

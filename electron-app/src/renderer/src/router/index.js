@@ -25,6 +25,15 @@ const routes = [
         }
       },
       {
+        name: 'TextMessageReminder',
+        path: '/textMessageReminder',
+        component: () => import('@renderer/components/textMessageReminder/index.vue'),
+        meta: {
+          title: '短信提醒',
+          keepAlive: true
+        }
+      },
+      {
         name: 'User',
         path: '/user',
         component: () => import('@renderer/components/user/index.vue'),
