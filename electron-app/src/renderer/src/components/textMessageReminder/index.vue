@@ -1,11 +1,14 @@
 <script setup>
+import { ref } from 'vue'
 import goBack from '@renderer/components/go-back/index.vue'
+
+const showLoading = ref(false)
 </script>
 
 <template>
   <div class="box">
-    <n-grid x-gap="12" :cols="1">
-      <n-gi>
+    <n-spin :show="showLoading" class="loading-container">
+      <n-scrollbar>
         <div class="message-container">
           <goBack />
           <!-- 顶部区域 -->
@@ -14,8 +17,8 @@ import goBack from '@renderer/components/go-back/index.vue'
           <!-- 内容区域 -->
           <div class="contentArea"></div>
         </div>
-      </n-gi>
-    </n-grid>
+      </n-scrollbar>
+    </n-spin>
   </div>
 </template>
 
@@ -26,18 +29,31 @@ import goBack from '@renderer/components/go-back/index.vue'
   background-color: #fff;
 
   box-sizing: border-box;
-}
-.message-container {
-  height: 100%;
-  padding: 20px;
-  .topArea {
-    height: 40%;
 
-    border: 1px solid black;
-  }
+  .loading-container {
+    height: 100%;
 
-  .contentArea {
-    height: 60%;
+    :deep(.n-spin-content) {
+      height: 100%;
+    }
+
+    .message-container {
+      height: 100%;
+      padding: 20px;
+
+      box-sizing: border-box;
+
+      overflow: auto;
+      .topArea {
+        height: 40%;
+
+        border: 1px solid black;
+      }
+
+      .contentArea {
+        height: 60%;
+      }
+    }
   }
 }
 </style>
