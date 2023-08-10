@@ -30,7 +30,15 @@ import {
   NCard,
   NBreadcrumb,
   NBreadcrumbItem,
-  NSkeleton
+  NSkeleton,
+  NModal,
+  NDynamicTags,
+  NSelect,
+  NDivider,
+  NEllipsis,
+  NTag,
+  NTimePicker,
+  NPopover
 } from 'naive-ui'
 
 const pinia = createPinia()
@@ -60,7 +68,15 @@ const naive = create({
     NCard,
     NBreadcrumb,
     NBreadcrumbItem,
-    NSkeleton
+    NSkeleton,
+    NModal,
+    NDynamicTags,
+    NSelect,
+    NDivider,
+    NEllipsis,
+    NTag,
+    NTimePicker,
+    NPopover
   ]
 })
 

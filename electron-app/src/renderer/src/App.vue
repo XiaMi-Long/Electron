@@ -23,7 +23,7 @@ init()
 
 <style lang="less">
 @import './assets/css/styles.scss';
-
+@import './assets/css/common.scss';
 body {
   background-color: #ecedef;
 

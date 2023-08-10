@@ -1,0 +1,17 @@
+.n-ellipsis {
+  overflow: hidden;
+  display: -webkit-inline-box;
+  -webkit-box-orient: vertical;
+}
+
+.n-ellipsis-1 {
+  -webkit-line-clamp: 1;
+}
+
+.n-ellipsis-2 {
+  -webkit-line-clamp: 2;
+}
+
+.n-ellipsis-3 {
+  -webkit-line-clamp: 3;
+}

@@ -121,7 +121,7 @@ onMounted(() => {
 
   .content {
     width: calc(100% - 200px);
-    height: 100%;
+    padding: 20px;
   }
 }
 </style>

@@ -84,7 +84,7 @@ const rendererImage = function (data) {
  */
 const imageLoad = function (index) {
   setTimeout(() => {
-    if (imageList.value[index]) {
+    if (!imageList.value[index]) {
       return
     }
 
