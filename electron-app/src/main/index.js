@@ -26,6 +26,9 @@ import {
   handleDeleteImage
 } from './module/background/file'
 
+// TEXTMASSAGE
+import { handlePushTextMessage } from './module/text-message/service'
+
 // COMMON
 import {
   handleSynchronizeLocalAppConfigFileByWrite,
@@ -106,18 +109,24 @@ app.whenReady().then(() => {
 
   // 监听渲染进程初始化操作
   ipcMain.handle('init:init-renderer', handleInitRenderer)
+
   // 监听打开文件选择文件操作
   ipcMain.handle('dialog:openImageFile', handleImageFileOpen)
   // 监听更新本地头像文件
   ipcMain.handle('update:avatar-file', handleUpdateLocalAvatarFile)
+
   // 监听打开背景页面,读取本地配置图片
   ipcMain.handle('background:init:rendererImage', initRendererImage)
   // 监听用户上传背景图片
   ipcMain.handle('background:dialog:openImageFile', handleBackgroundAddImage)
+
   // 监听渲染进程获取appconfig数据
   ipcMain.handle('get:get-appConfig', getAppConfig)
   // 监听背景图片删除
   ipcMain.handle('background:background-delete', handleDeleteImage)
+
+  // 监听添加提醒
+  ipcMain.handle('text-message:push-text-message', handlePushTextMessage)
 
   // 监听是否要同步本地最新文件数据到内存
   ipcMain.on('synchronizeLocalAppConfigByRead', handleSynchronizeLocalAppConfigFileByRead)
@@ -125,8 +134,10 @@ app.whenReady().then(() => {
   ipcMain.on('background-start', handleStart)
   // 监听背景切换停止
   ipcMain.on('background-stop', handleStop)
+
   // 监听同步本地appconfig文件数据
   ipcMain.on('synchronize-local-app-config-file', handleSynchronizeLocalAppConfigFileByWrite)
+
   // 监听写入日志操作
   ipcMain.on('write-log', (event, str, type) => {
     writeLog(str, type)

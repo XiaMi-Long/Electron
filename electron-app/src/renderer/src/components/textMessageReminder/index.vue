@@ -1,8 +1,8 @@
 <script setup>
 import dayjs from 'dayjs'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import add from './components/add.vue'
-import { TimerOutlined } from '@vicons/material'
+import { DeleteForeverSharp } from '@vicons/material'
 import goBack from '@renderer/components/go-back/index.vue'
 import { useTextMessageStore } from '@renderer/paina/text-message'
 
@@ -10,7 +10,6 @@ const showModal = ref(false)
 const showLoading = ref(false)
 const textMessage = useTextMessageStore()
 
-console.log(textMessage.messageList)
 /**
  * 打开添加提醒弹窗
  */
@@ -29,7 +28,6 @@ const closeModal = function () {
  * 根据importanceLevel的值来决定返回什么颜色
  */
 const getBorderColor = function (value) {
-  console.log(value)
   if (value === 1) {
     return '#ff6268'
   }
@@ -38,6 +36,12 @@ const getBorderColor = function (value) {
     return '#33abff'
   }
 }
+
+// 获取本地数据里面的提醒信息
+onMounted(async () => {
+  const config = await window.api.get.getAppConfig()
+  textMessage.updateMessageList(config.textMessage)
+})
 </script>
 
 <template>
@@ -63,7 +67,7 @@ const getBorderColor = function (value) {
                   />
 
                   <template #header>
-                    <n-popover trigger="hover">
+                    <n-popover trigger="hover" width="trigger">
                       <template #trigger>
                         <span class="n-ellipsis n-ellipsis-1">
                           {{ item.title }}
@@ -89,7 +93,7 @@ const getBorderColor = function (value) {
 
                   <!-- 内容区域 -->
                   <div class="text">
-                    <n-popover trigger="hover">
+                    <n-popover trigger="hover" width="trigger">
                       <template #trigger>
                         <span class="n-ellipsis n-ellipsis-2">
                           {{ item.content }}
@@ -101,9 +105,12 @@ const getBorderColor = function (value) {
 
                   <!-- 提醒时间 -->
                   <div class="time-text">
-                    <n-icon size="15">
-                      <TimerOutlined />
-                    </n-icon>
+                    <div class="remove-icon">
+                      <n-icon size="15">
+                        <DeleteForeverSharp />
+                      </n-icon>
+                    </div>
+
                     <div>
                       <span v-if="item.timeType === 1 && item.time">
                         每天{{ dayjs(item.time).format('HH:mm:ss') }}时提醒
@@ -173,11 +180,17 @@ const getBorderColor = function (value) {
           .time-text {
             display: flex;
             align-items: center;
-            justify-content: end;
+            justify-content: space-between;
 
             color: #777;
 
             font-size: 12px;
+
+            .remove-icon {
+              cursor: pointer;
+
+              color: #ff6060;
+            }
           }
         }
       }

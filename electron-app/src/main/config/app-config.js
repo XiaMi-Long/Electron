@@ -12,7 +12,8 @@ let appConfig = {
   background: {
     imagePath: '/images/background/',
     imageList: []
-  }
+  },
+  textMessage: []
 }
 
 const setAppConfig = (config) => (appConfig = config)

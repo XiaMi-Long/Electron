@@ -13,6 +13,7 @@ export const handleSynchronizeLocalAppConfigFileByWrite = async function (event,
   fs.writeFile(appConfigFilePath, jsonData, (err2) => {
     if (err2) {
       writeLog(`在${type}之后更新同步${appConfigFilePath}文件失败`, 'error')
+      throw new Error(`在${type}之后更新同步${appConfigFilePath}文件失败`)
     }
 
     if (!err2) {

@@ -2,6 +2,7 @@
 import dayjs from 'dayjs'
 import { useMessage } from 'naive-ui'
 import { ref, computed, watch } from 'vue'
+import { generateUUID } from '@renderer/util/uuid'
 import { TimerOutlined } from '@vicons/material'
 import { useTextMessageStore } from '@renderer/paina/text-message'
 
@@ -16,6 +17,7 @@ const emit = defineEmits(['close'])
 const textMessage = useTextMessageStore()
 
 const form = ref({
+  uuid: '',
   title: '我推的孩子',
   content: `《我推的孩子》（日语：推しの子）是由赤坂明原作、横枪萌果作画的一部漫画，于集英社《週刊YOUNG JUMP》2020年第21期开始连载1。截至2作；第1集时长为90分钟，并`,
   label: [],
@@ -95,7 +97,7 @@ const weekOptions = [
     value: 6
   },
   {
-    label: '七',
+    label: '日',
     value: 7
   }
 ]
@@ -153,8 +155,15 @@ const add = function (e) {
   e.preventDefault()
   formRef.value?.validate(async (errors) => {
     if (!errors) {
-      textMessage.setMessageList(form.value)
-      message.success('添加提醒成功')
+      form.value.uuid = generateUUID()
+      const bool = textMessage.setMessageList(form.value)
+      if (bool) {
+        message.success('添加提醒成功')
+      }
+
+      if (!bool) {
+        message.error('添加提醒失败')
+      }
       emit('close')
     } else {
       message.error('表单填写错误')
@@ -286,7 +295,7 @@ watch(
                 />
 
                 <template #header>
-                  <n-popover trigger="hover">
+                  <n-popover trigger="hover" width="trigger">
                     <template #trigger>
                       <span class="n-ellipsis n-ellipsis-1">
                         {{ form.title }}
@@ -312,7 +321,7 @@ watch(
 
                 <!-- 内容区域 -->
                 <div class="priview-text">
-                  <n-popover trigger="hover">
+                  <n-popover trigger="hover" width="trigger">
                     <template #trigger>
                       <span class="n-ellipsis n-ellipsis-2">
                         {{ form.content }}

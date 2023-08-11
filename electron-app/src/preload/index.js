@@ -26,6 +26,12 @@ const api = {
     handleStop: () => ipcRenderer.send('background-stop')
   },
 
+  textMessage: {
+    // 添加数据
+    pushTextMessage: (value, cron) =>
+      ipcRenderer.invoke('text-message:push-text-message', value, cron)
+  },
+
   // 同步本地appconfig文件数据
   synchronizeLocalAppConfigFile: (appConfig, type) =>
     ipcRenderer.send('synchronize-local-app-config-file', appConfig, type),

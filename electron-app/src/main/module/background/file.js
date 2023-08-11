@@ -115,11 +115,20 @@ export const handleDeleteImage = async function (event, imgUrl) {
       } else {
         const { imageList } = appConfig.background
         appConfig.background.imageList = imageList.filter((img) => img.path !== imgUrl)
-        handleSynchronizeLocalAppConfigFileByWrite(null, '切换背景页面:删除图片之后进行数据的同步')
-        // 停止背景切换
-        handleStop()
-        writeLog(`文件路径:${imgUrl}删除成功`, 'success')
-        resolve(true)
+        try {
+          handleSynchronizeLocalAppConfigFileByWrite(
+            null,
+            '切换背景页面:删除图片之后进行数据的同步'
+          )
+          writeLog(`文件路径:${imgUrl}删除成功`, 'success')
+          resolve(true)
+        } catch (error) {
+          reject(false)
+          writeLog(`文件路径:${imgUrl}删除失败`, 'success')
+        } finally {
+          // 停止背景切换
+          handleStop()
+        }
       }
     })
   })
