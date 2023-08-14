@@ -137,7 +137,7 @@ app.whenReady().then(() => {
   // 监听提醒开始
   ipcMain.handle('text-message:start', handleStartTextMessage)
   // 监听提醒结束
-  ipcMain.handle('text-message:end', handleEndTextMessage)
+  ipcMain.handle('text-message:stop', handleEndTextMessage)
 
   // 监听是否要同步本地最新文件数据到内存
   ipcMain.on('synchronizeLocalAppConfigByRead', handleSynchronizeLocalAppConfigFileByRead)

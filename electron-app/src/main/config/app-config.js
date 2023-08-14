@@ -1,7 +1,7 @@
 import { app } from 'electron'
 
 let appConfig = {
-  systemFileAddress: app.getAppPath(),
+  systemFileAddress: app.getPath('userData'),
   appConfigFileName: 'app-config.json',
   appLogFileName: 'app-log.txt',
   user: {

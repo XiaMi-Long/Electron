@@ -1,5 +1,5 @@
 appId: com.electron.app
-productName: electron-app
+productName: easy-util
 directories:
   buildResources: build
 files:
@@ -12,12 +12,19 @@ asarUnpack:
   - resources/**
 afterSign: build/notarize.js
 win:
-  executableName: electron-app
+  executableName: easy-util
+  target:
+    - target: nsis
 nsis:
+  oneClick: false
+  perMachine: true
+  allowToChangeInstallationDirectory: true
+  removeDefaultUninstallWelcomePage: true
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
+  include: build/uninstaller.nsh
 mac:
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:

@@ -45,6 +45,8 @@ const start = async function (uuid) {
   showLoading.value = true
   const isBool = await window.api.textMessage.start(uuid)
   if (isBool) {
+    const findIndex = textMessage.messageList.findIndex((item) => item.uuid === uuid)
+    textMessage.messageList[findIndex].isStart = true
     message.success('运行成功')
   }
 
@@ -58,7 +60,20 @@ const start = async function (uuid) {
 /**
  * 停止提醒
  */
-const stop = function () {}
+const stop = async function (uuid) {
+  showLoading.value = true
+  const isBool = await window.api.textMessage.stop(uuid)
+  if (isBool) {
+    const findIndex = textMessage.messageList.findIndex((item) => item.uuid === uuid)
+    textMessage.messageList[findIndex].isStart = false
+    message.success('停止成功')
+  }
+
+  if (!isBool) {
+    message.error('停止失败')
+  }
+  showLoading.value = false
+}
 
 // 获取本地数据里面的提醒信息
 onMounted(async () => {

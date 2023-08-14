@@ -158,7 +158,7 @@ const add = function (e) {
   formRef.value?.validate(async (errors) => {
     if (!errors) {
       form.value.uuid = generateUUID()
-      const bool = textMessage.setMessageList(form.value)
+      const bool = textMessage.setMessageList(JSON.parse(JSON.stringify(form.value)))
       if (bool) {
         message.success('添加提醒成功')
       }
