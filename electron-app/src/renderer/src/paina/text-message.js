@@ -19,10 +19,10 @@ export const useTextMessageStore = defineStore('text-message', {
     async setMessageList(value) {
       // 解析时间位cron表达式
       const cron = generateCronExpression(value.time, value.timeType, value.week)
+      value.cron = cron
       // 向本地添加数据
       const isTrue = window.api.textMessage.pushTextMessage(
-        JSON.stringify([...this.messageList, value]),
-        cron
+        JSON.stringify([...this.messageList, value])
       )
       if (isTrue) {
         this.messageList.push(value)
@@ -42,18 +42,19 @@ export const useTextMessageStore = defineStore('text-message', {
 
 function generateCronExpression(timestamp, type, dayOfWeek) {
   let date = new Date(timestamp)
+  let seconds = date.getSeconds()
   let minute = date.getMinutes()
   let hour = date.getHours()
   let cronExpression = ''
   switch (type) {
     case 1:
-      cronExpression = `${minute} ${hour} * * *`
+      cronExpression = `${seconds} ${minute} ${hour} * * *`
       break
     case 2:
-      cronExpression = `${minute} ${hour} * * *`
+      cronExpression = `${seconds} ${minute} ${hour} * * *`
       break
     case 3:
-      cronExpression = `${minute} ${hour} * * ${dayOfWeek}`
+      cronExpression = `${seconds} ${minute} ${hour} * * ${dayOfWeek}`
       break
     default:
       console.log('Invalid type')

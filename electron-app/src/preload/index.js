@@ -28,8 +28,9 @@ const api = {
 
   textMessage: {
     // 添加数据
-    pushTextMessage: (value, cron) =>
-      ipcRenderer.invoke('text-message:push-text-message', value, cron)
+    pushTextMessage: (value) => ipcRenderer.invoke('text-message:push-text-message', value),
+    start: (uuid) => ipcRenderer.invoke('text-message:start', uuid),
+    stop: (uuid) => ipcRenderer.invoke('text-message:stop', uuid)
   },
 
   // 同步本地appconfig文件数据

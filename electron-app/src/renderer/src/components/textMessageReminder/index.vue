@@ -1,11 +1,12 @@
 <script setup>
 import dayjs from 'dayjs'
 import { ref, onMounted } from 'vue'
+import { useMessage } from 'naive-ui'
 import add from './components/add.vue'
-import { DeleteForeverSharp } from '@vicons/material'
 import goBack from '@renderer/components/go-back/index.vue'
 import { useTextMessageStore } from '@renderer/paina/text-message'
 
+const message = useMessage()
 const showModal = ref(false)
 const showLoading = ref(false)
 const textMessage = useTextMessageStore()
@@ -36,6 +37,28 @@ const getBorderColor = function (value) {
     return '#33abff'
   }
 }
+
+/**
+ * 运行提醒
+ */
+const start = async function (uuid) {
+  showLoading.value = true
+  const isBool = await window.api.textMessage.start(uuid)
+  if (isBool) {
+    message.success('运行成功')
+  }
+
+  if (!isBool) {
+    message.error('运行失败')
+  }
+
+  showLoading.value = false
+}
+
+/**
+ * 停止提醒
+ */
+const stop = function () {}
 
 // 获取本地数据里面的提醒信息
 onMounted(async () => {
@@ -105,10 +128,12 @@ onMounted(async () => {
 
                   <!-- 提醒时间 -->
                   <div class="time-text">
-                    <div class="remove-icon">
-                      <n-icon size="15">
-                        <DeleteForeverSharp />
-                      </n-icon>
+                    <div class="text">
+                      <span v-if="item.isStart" @click="stop(item.uuid)">停止运行</span>
+                      <span v-if="item.isStart"> 运行中 </span>
+
+                      <span v-if="!item.isStart" @click="start(item.uuid)">运行</span>
+                      <span v-if="!item.isStart"> 已停止 </span>
                     </div>
 
                     <div>
@@ -186,10 +211,14 @@ onMounted(async () => {
 
             font-size: 12px;
 
-            .remove-icon {
+            .text {
               cursor: pointer;
 
               color: #ff6060;
+
+              & span:nth-child(1) {
+                color: #00d800;
+              }
             }
           }
         }

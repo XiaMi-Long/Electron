@@ -26,7 +26,9 @@ const form = ref({
   phone: '17115664133',
   time: '',
   timeType: '',
-  week: ''
+  week: '',
+  isStart: false,
+  cron: ''
 })
 
 const labelTypeOptions = [

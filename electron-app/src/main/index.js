@@ -12,6 +12,9 @@ import assets from './image/icon.png?asset'
 // INIT
 import { initFileConfig, handleInitRenderer } from './module/init'
 
+// QUIT
+import { quit } from './module/quit'
+
 // CONFIG
 import { getAppConfig } from './config/app-config'
 
@@ -27,7 +30,11 @@ import {
 } from './module/background/file'
 
 // TEXTMASSAGE
-import { handlePushTextMessage } from './module/text-message/service'
+import {
+  handlePushTextMessage,
+  handleStartTextMessage,
+  handleEndTextMessage
+} from './module/text-message/service'
 
 // COMMON
 import {
@@ -127,6 +134,10 @@ app.whenReady().then(() => {
 
   // 监听添加提醒
   ipcMain.handle('text-message:push-text-message', handlePushTextMessage)
+  // 监听提醒开始
+  ipcMain.handle('text-message:start', handleStartTextMessage)
+  // 监听提醒结束
+  ipcMain.handle('text-message:end', handleEndTextMessage)
 
   // 监听是否要同步本地最新文件数据到内存
   ipcMain.on('synchronizeLocalAppConfigByRead', handleSynchronizeLocalAppConfigFileByRead)
@@ -191,7 +202,7 @@ app.on('window-all-closed', () => {
 })
 
 app.on('will-quit', () => {
-  console.log(1)
+  quit()
 })
 
 // In this file you can include the rest of your app"s specific main process
